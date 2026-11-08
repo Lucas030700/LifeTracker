@@ -845,4 +845,43 @@ main .planner-section #plannerGrid>.planner-tile:active{filter:brightness(1.08)}
   main#top{padding-bottom:78px!important}
 }
 </style>
+
+<style id="match-financial-and-planner-widths">
+/* Exact shared three-column sizing for the three finance cards and planner tiles */
+@media(max-width:760px){
+  main#top>.home-metrics{
+    display:grid!important;
+    grid-template-columns:repeat(3,minmax(0,1fr))!important;
+    gap:7px!important;
+    width:100%!important;
+    max-width:none!important;
+    box-sizing:border-box!important;
+  }
+  main#top>.home-metrics>.metric,
+  main#top>.home-metrics>.metric-button,
+  main#top>.home-metrics>.metric:first-child,
+  main#top>.home-metrics>.metric-button:first-child{
+    grid-column:auto!important;
+    width:100%!important;
+    min-width:0!important;
+    max-width:none!important;
+    box-sizing:border-box!important;
+  }
+  main#top>.planner-section,
+  main#top>.planner-section #plannerBlock,
+  main#top>.planner-section #plannerGrid{
+    width:100%!important;
+    max-width:none!important;
+    box-sizing:border-box!important;
+  }
+  main#top>.planner-section #plannerGrid{gap:7px!important}
+  main#top>.planner-section #plannerGrid>.planner-tile{
+    flex:0 0 calc((100% - 14px)/3)!important;
+    width:calc((100% - 14px)/3)!important;
+    min-width:calc((100% - 14px)/3)!important;
+    max-width:calc((100% - 14px)/3)!important;
+    box-sizing:border-box!important;
+  }
+}
+</style>
 </body></html>
