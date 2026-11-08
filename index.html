@@ -58,6 +58,27 @@ main{padding-top:34px}
 
 .cloud-card{margin-top:18px}.cloud-status{display:flex;align-items:center;gap:8px;font-size:11px;color:var(--muted);margin:10px 0}.cloud-dot{width:8px;height:8px;border-radius:50%;background:#b9c2bb}.cloud-dot.online{background:#3a9b62}.cloud-dot.warn{background:#d5a34c}.cloud-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.cloud-grid .wide{grid-column:1/-1}.cloud-grid input{width:100%;border:1px solid var(--line);border-radius:7px;padding:10px;font:500 12px 'DM Sans';color:var(--ink)}.cloud-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.cloud-actions button{border:0;background:var(--green);color:#fff;border-radius:7px;padding:10px 13px;font:600 11px 'DM Sans';cursor:pointer}.cloud-actions button.secondary{background:#edf3ed;color:var(--green)}.cloud-message{font-size:11px;line-height:1.5;color:var(--muted);margin-top:10px}.qr-wrap{margin-top:12px;padding:12px;border:1px dashed #cbd8cc;border-radius:10px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}.qr-wrap img{width:150px;height:150px}.qr-wrap code{font-size:10px;word-break:break-all}.cloud-danger{font-size:10px;color:#9a6957;line-height:1.5;margin-top:12px}
 @media(max-width:760px){.cloud-grid{grid-template-columns:1fr}.cloud-grid .wide{grid-column:auto}.cloud-actions button{flex:1}.qr-wrap{justify-content:center}}
+
+/* Compact text-only planner ribbon */
+main .planner-section #plannerGrid{
+  height:39px!important;min-height:39px!important;max-height:39px!important;
+  padding:1px 0 2px!important;gap:7px!important;
+}
+main .planner-section #plannerGrid>.planner-tile{
+  display:flex!important;flex:0 0 calc((100% - 14px)/3)!important;
+  width:calc((100% - 14px)/3)!important;min-width:calc((100% - 14px)/3)!important;
+  max-width:calc((100% - 14px)/3)!important;
+  height:34px!important;min-height:34px!important;max-height:34px!important;
+  align-items:center!important;justify-content:center!important;gap:0!important;
+  padding:3px 5px!important;border-radius:9px!important;
+}
+main .planner-section #plannerGrid>.planner-tile .planner-copy{
+  flex:1 1 100%!important;width:100%!important;text-align:center!important;
+}
+main .planner-section #plannerGrid>.planner-tile .planner-copy b{
+  font-size:10px!important;line-height:1.1!important;
+}
+
 </style><style>
 /* iPhone 15 Pro target: 393 CSS px. Shared components reflow rather than using a separate mobile design. */
 @media (max-width:430px){
@@ -107,12 +128,12 @@ main{padding-top:34px}
 <div class="metricrow home-metrics" data-page="overview" aria-live="polite"><button class="metric metric-button usable-metric" type="button" id="usableCard" aria-expanded="false" onclick="toggleHomeDetail('usable')"><label>Usable assets</label><strong id="usableTotal">₱—</strong><span>Available for your milestones · View details</span></button><button class="metric metric-button" type="button" id="reserveCard" aria-expanded="false" onclick="toggleHomeDetail('reserve')"><label>Emergency fund</label><strong id="homeReserve">Not set</strong><span>Your protected target · View details</span></button><button class="metric metric-button" type="button" id="worthCard" aria-expanded="false" onclick="toggleHomeDetail('worth')"><label>Net worth</label><strong id="netWorth">₱—</strong><span>After recorded loans · View details</span></button></div><section class="planner-section" data-page="overview">
  <div id="plannerBlock">
  <div class="planner-grid" id="plannerGrid">
-  <button class="planner-tile" type="button" data-planner="salary" onclick="openPlannerFromCard(event,'salary')"><span class="planner-icon" aria-hidden="true">▤</span><span class="planner-copy"><b>Salary</b></span></button>
-  <button class="planner-tile" type="button" data-planner="wedding" onclick="openPlannerFromCard(event,'wedding')"><span class="planner-icon" aria-hidden="true">♧</span><span class="planner-copy"><b>Wedding</b></span></button>
-  <button class="planner-tile" type="button" data-planner="house" onclick="openPlannerFromCard(event,'house')"><span class="planner-icon" aria-hidden="true">⌂</span><span class="planner-copy"><b>House</b></span></button>
-  <button class="planner-tile" type="button" data-planner="car" onclick="openPlannerFromCard(event,'car')"><span class="planner-icon" aria-hidden="true">▰</span><span class="planner-copy"><b>Car</b></span></button>
-  <button class="planner-tile" type="button" data-planner="travel" onclick="openPlannerFromCard(event,'travel')"><span class="planner-icon" aria-hidden="true">➤</span><span class="planner-copy"><b>Travel</b></span></button>
-  <button class="planner-tile" type="button" data-planner="child" onclick="openPlannerFromCard(event,'child')"><span class="planner-icon" aria-hidden="true">♙</span><span class="planner-copy"><b>Child</b></span></button>
+  <button class="planner-tile" type="button" data-planner="salary" onclick="openPlannerFromCard(event,'salary')"><span class="planner-copy"><b>Salary</b></span></button>
+  <button class="planner-tile" type="button" data-planner="wedding" onclick="openPlannerFromCard(event,'wedding')"><span class="planner-copy"><b>Wedding</b></span></button>
+  <button class="planner-tile" type="button" data-planner="house" onclick="openPlannerFromCard(event,'house')"><span class="planner-copy"><b>House</b></span></button>
+  <button class="planner-tile" type="button" data-planner="car" onclick="openPlannerFromCard(event,'car')"><span class="planner-copy"><b>Car</b></span></button>
+  <button class="planner-tile" type="button" data-planner="travel" onclick="openPlannerFromCard(event,'travel')"><span class="planner-copy"><b>Travel</b></span></button>
+  <button class="planner-tile" type="button" data-planner="child" onclick="openPlannerFromCard(event,'child')"><span class="planner-copy"><b>Child</b></span></button>
  
   </div>
  </div>
