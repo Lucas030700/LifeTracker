@@ -105,7 +105,7 @@ main{padding-top:34px}
 <body><div class="shell"><aside class="sidebar"><div class="brand"><div class="mark">↗</div>lifeplan</div><div class="navlabel">YOUR PLAN</div><nav class="nav"><a class="active" href="#"><span class="ico">◫</span>Overview</a><a href="#events"><span class="ico">◷</span>Life milestones</a><a href="#strategy"><span class="ico">⌁</span>Money strategy</a><a href="#farm"><span class="ico">♧</span>Farm & assets</a></nav><div class="side-note"><b>A plan that grows with you</b>Explore what feels possible. Every number is yours to adjust.</div><div class="profile"><div class="avatar">M</div><div><b>My plan</b><br><small>Personal workspace</small></div></div></aside>
 <main id="top"><section class="page-hero" data-page="overview"><div class="page-hero-mark">✦</div><div><div class="page-hero-kicker">YOUR LIFE, YOUR PLAN</div><h1 class="hello">Life Planner</h1><p class="sub">Your future, in view. Plan your goals, money, and milestones in one place.</p></div><span class="page-hero-orbit" aria-hidden="true"></span></section>
 <div class="metricrow home-metrics" data-page="overview" aria-live="polite"><button class="metric metric-button usable-metric" type="button" id="usableCard" aria-expanded="false" onclick="toggleHomeDetail('usable')"><label>Usable assets</label><strong id="usableTotal">₱—</strong><span>Available for your milestones · View details</span></button><button class="metric metric-button" type="button" id="reserveCard" aria-expanded="false" onclick="toggleHomeDetail('reserve')"><label>Emergency fund</label><strong id="homeReserve">Not set</strong><span>Your protected target · View details</span></button><button class="metric metric-button" type="button" id="worthCard" aria-expanded="false" onclick="toggleHomeDetail('worth')"><label>Net worth</label><strong id="netWorth">₱—</strong><span>After recorded loans · View details</span></button></div><section class="planner-section" data-page="overview">
- 
+ <div class="planner-ribbon-label"><span class="section-kicker">YOUR PLANNERS</span><button class="planner-add" type="button" onclick="addPlanner()">＋ ADD</button></div>
  <div id="plannerBlock">
  <div class="planner-grid" id="plannerGrid">
   <button class="planner-tile" type="button" data-planner="salary" onclick="openPlannerFromCard(event,'salary')"><span class="planner-handle" aria-hidden="true">⠿</span><span class="planner-icon" data-icon="wallet"></span><span class="planner-copy"><b>Salary</b><small>Income & savings</small></span><span class="planner-arrow">›</span></button>
@@ -114,7 +114,7 @@ main{padding-top:34px}
   <button class="planner-tile" type="button" data-planner="car" onclick="openPlannerFromCard(event,'car')"><span class="planner-handle" aria-hidden="true">⠿</span><span class="planner-icon" data-icon="car"></span><span class="planner-copy"><b>Car</b><small>Purchase & ownership</small></span><span class="planner-arrow">›</span></button>
   <button class="planner-tile" type="button" data-planner="travel" onclick="openPlannerFromCard(event,'travel')"><span class="planner-handle" aria-hidden="true">⠿</span><span class="planner-icon" data-icon="plane"></span><span class="planner-copy"><b>Travel</b><small>Trips & itineraries</small></span><span class="planner-arrow">›</span></button>
   <button class="planner-tile" type="button" data-planner="child" onclick="openPlannerFromCard(event,'child')"><span class="planner-handle" aria-hidden="true">⠿</span><span class="planner-icon" data-icon="baby"></span><span class="planner-copy"><b>Child</b><small>Family & education</small></span><span class="planner-arrow">›</span></button>
- <button class="planner-tile planner-add-tile" type="button" onclick="addPlanner()" aria-label="Add planner"><span class="planner-icon">＋</span><span class="planner-copy"><b>Add</b><small>New planner</small></span></button>
+ 
  </div>
  
  </div>
@@ -430,4 +430,44 @@ function importLifePlanData(event){const file=event.target.files?.[0];if(!file)r
 
 
 
-initPlannerIcons();renderCustomPlanners();bindPlannerDrag();window.addEventListener('resize',()=>selectPage(activePage));document.querySelectorAll('.mobile-nav button').forEach(btn=>btn.addEventListener('click',()=>selectPage(btn.dataset.page)));const localToday=new Date();localToday.setMinutes(localToday.getMinutes()-localToday.getTimezoneOffset());document.getElementById('cropDate').value=localToday.toISOString().slice(0,10);fields.forEach(id=>document.getElementById(id).addEventListener('input',draw));document.getElementById('cashSplit').addEventListener('input',draw);(async()=>{draw();selectPage(activePage);try{await initializeCloud()}catch(e){document.getElementById('authError').textContent=e.message;document.getElementById('authGate').style.display='flex'}setInterval(pollCloud,1800);document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')pollCloud()});window.addEventListener('focus',pollCloud);supabaseClient.auth.onAuthStateChange(async(_event,session)=>{if(session?.user&&!currentUser){currentUser=session.user;await finishAccountConnection()}else if(!session){currentUser=null;cloudReady=false}})})();</script></body></html>
+initPlannerIcons();renderCustomPlanners();bindPlannerDrag();window.addEventListener('resize',()=>selectPage(activePage));document.querySelectorAll('.mobile-nav button').forEach(btn=>btn.addEventListener('click',()=>selectPage(btn.dataset.page)));const localToday=new Date();localToday.setMinutes(localToday.getMinutes()-localToday.getTimezoneOffset());document.getElementById('cropDate').value=localToday.toISOString().slice(0,10);fields.forEach(id=>document.getElementById(id).addEventListener('input',draw));document.getElementById('cashSplit').addEventListener('input',draw);(async()=>{draw();selectPage(activePage);try{await initializeCloud()}catch(e){document.getElementById('authError').textContent=e.message;document.getElementById('authGate').style.display='flex'}setInterval(pollCloud,1800);document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')pollCloud()});window.addEventListener('focus',pollCloud);supabaseClient.auth.onAuthStateChange(async(_event,session)=>{if(session?.user&&!currentUser){currentUser=session.user;await finishAccountConnection()}else if(!session){currentUser=null;cloudReady=false}})})();</script><style>/* FINAL planner visibility/layout override */
+@media(max-width:760px){
+ main .planner-section[data-page="overview"]{display:block!important;visibility:visible!important;opacity:1!important;position:relative!important;width:100%!important;min-height:0!important;height:auto!important;margin:14px 0 16px!important;padding:0!important;overflow:visible!important}
+ main .planner-section[data-page="overview"].page-hidden{display:none!important}
+ .planner-section .planner-ribbon-label{display:flex!important;align-items:center!important;justify-content:space-between!important;margin:0 3px 9px!important;min-height:30px}
+ .planner-section #plannerBlock{display:block!important;visibility:visible!important;opacity:1!important;width:100%!important;height:auto!important;max-height:none!important;overflow:visible!important}
+ .planner-section #plannerGrid,.planner-section #plannerGrid.is-dragging{
+  display:grid!important;visibility:visible!important;opacity:1!important;
+  grid-auto-flow:column!important;grid-template-rows:repeat(2,82px)!important;
+  grid-template-columns:none!important;grid-auto-columns:calc((100% - 9px)/2)!important;
+  grid-auto-rows:82px!important;gap:9px!important;
+  width:100%!important;height:173px!important;min-height:173px!important;max-height:173px!important;
+  overflow-x:auto!important;overflow-y:hidden!important;overflow-inline:auto!important;
+  padding:2px 2px 7px!important;margin:0!important;
+  scroll-snap-type:x mandatory!important;scroll-behavior:smooth!important;
+  -webkit-overflow-scrolling:touch!important;overscroll-behavior-x:contain!important;
+  touch-action:pan-x!important;scrollbar-width:none!important
+ }
+ .planner-section #plannerGrid::-webkit-scrollbar{display:none!important}
+ .planner-section #plannerGrid>.planner-tile{
+  display:grid!important;visibility:visible!important;opacity:1!important;
+  position:relative!important;inset:auto!important;flex:none!important;
+  width:100%!important;min-width:0!important;height:82px!important;min-height:82px!important;
+  grid-column:auto!important;grid-row:auto!important;
+  grid-template-columns:19px 30px minmax(0,1fr) 8px!important;
+  align-items:center!important;gap:5px!important;padding:7px 6px!important;
+  border:1px solid #dce7dd!important;border-radius:13px!important;
+  background:#fbfdfb!important;box-shadow:0 2px 7px #244a3210!important;
+  scroll-snap-align:start!important;overflow:hidden!important
+ }
+ .planner-section #plannerGrid .planner-handle{display:grid!important;place-items:center!important;width:18px!important;height:30px!important;font-size:14px!important;touch-action:none!important}
+ .planner-section #plannerGrid .planner-icon{display:grid!important;width:29px!important;height:29px!important;border-radius:10px!important;background:#edf5ee!important}
+ .planner-section #plannerGrid .planner-icon svg{display:block!important;width:21px!important;height:21px!important}
+ .planner-section #plannerGrid .planner-copy{display:block!important;min-width:0!important}
+ .planner-section #plannerGrid .planner-copy b{display:block!important;font-size:11px!important;line-height:1.2!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important}
+ .planner-section #plannerGrid .planner-copy small{display:block!important;font-size:8px!important;line-height:1.2!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important}
+ .planner-section #plannerGrid .planner-arrow{display:block!important;font-size:16px!important}
+ .planner-section .planner-add{display:inline-flex!important;align-items:center!important;justify-content:center!important;min-height:30px!important;padding:6px 12px!important;border:1px solid #dce7dd!important;border-radius:999px!important;background:#f2f7f1!important;color:#28644c!important;font:700 10px Manrope,sans-serif!important}
+}
+</style>
+</body></html>
