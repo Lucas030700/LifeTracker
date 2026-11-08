@@ -377,7 +377,7 @@ function togglePlannerPreview(key){
   document.getElementById('plannerPreviewDescription').textContent='Track income, payroll, deductions, expenses and savings.';
   panel.querySelector('.planner-preview-empty').innerHTML='<span class="planner-preview-mark">＋</span><b>Salary workspace</b><span>Salary remains a separate planner. Its own income and payroll details are managed independently from life milestones.</span>';
  }else{
-  const name=decodeURIComponent(key.slice(9)),c=milestoneCalculation(name);
+  const name=decodeURIComponent(key.slice(10)),c=milestoneCalculation(name);
   if(!c){closePlannerPreview();return}
   const {goal,idx,readyMonth,initial}=c,ready=readyMonth===0?'Ready now':readyMonth==null?'Beyond 20 years':dateFor(readyMonth)+' · in '+Math.round(readyMonth/12)+' years';
   const coverage=goal.cost>0?Math.max(0,Math.min(100,initial.available/goal.cost*100)):100;
