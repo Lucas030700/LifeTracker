@@ -811,4 +811,38 @@ main#top>#homeDetail{margin:7px 0!important}
 }
 </style>
 
+
+<style id="lifeplanner-cohesive-mobile-refresh">
+/* Unified Life Planner palette: forest green, cream, sage and muted gold */
+main .planner-section #plannerGrid>.planner-tile,
+main .planner-section #plannerGrid>.planner-tile:nth-child(n){
+  background:linear-gradient(145deg,#214c39 0%,#173b2d 100%)!important;
+  border:1px solid #c6a45d!important;
+  color:#fbf8ef!important;
+  box-shadow:0 2px 5px rgba(24,58,42,.12)!important;
+}
+main .planner-section #plannerGrid>.planner-tile .planner-copy b{color:#fbf8ef!important}
+main .planner-section #plannerGrid>.planner-tile:active{filter:brightness(1.08)}
+/* Compact iPhone overview proportions */
+@media(max-width:760px){
+  main#top>.home-metrics>.metric{padding:8px 7px!important;min-height:0!important}
+  main#top>.home-metrics>.metric label{margin-bottom:2px!important}
+  main#top>.home-metrics>.metric strong{line-height:1.15!important}
+  main#top>.milestone-priority{padding:9px 11px!important}
+  main#top>.milestone-priority .cardhead{margin-bottom:2px!important}
+  main#top>.timeline-only-card{padding:7px 7px 5px!important}
+  main#top>.timeline-only-card .timeline-wrap{padding:5px 1px 4px!important}
+  main#top>.timeline-only-card .milestone-timeline{gap:7px!important;padding-bottom:1px!important}
+  main#top>.timeline-only-card .timeline-stop{
+    flex:0 0 132px!important;width:132px!important;min-height:0!important;
+    padding:0 9px 8px!important;border-radius:13px!important
+  }
+  main#top>.timeline-only-card .timeline-dot{margin:5px 0 7px!important}
+  main#top>.timeline-only-card .timeline-name{min-height:0!important;margin-top:3px!important}
+  main#top>.timeline-only-card .timeline-kind{margin-top:3px!important}
+  main#top>.timeline-only-card .timeline-budget{margin-top:5px!important}
+  main#top>.timeline-only-card .timeline-status{margin-top:4px!important}
+  main#top{padding-bottom:78px!important}
+}
+</style>
 </body></html>
