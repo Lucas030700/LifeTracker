@@ -119,7 +119,7 @@ main{padding-top:34px}
  </div>
 </section>
 <div class="breakdown home-detail" data-page="overview" id="homeDetail" hidden></div>
-<section class="card milestone-priority" data-page="overview"><button class="cardhead block-toggle" type="button" aria-expanded="false" aria-controls="milestoneBlock" onclick="toggleMilestoneBlock()"><span><span class="section-kicker">FUNDING SEQUENCE</span><h3>Your milestone order</h3><span class="hint">Drag a goal to decide what your money funds first.</span></span><span class="block-chevron">⌄</span></button><div id="milestoneBlock" hidden><div class="priority-list" id="priorityList"></div><div class="priority-note">The cards shift in place when you reorder them. Each completed goal uses its budget before the next goal is funded, so the dates update automatically.</div><button class="priority-next" type="button" onclick="selectPage('goals')">Edit goal budgets →</button><div id="milestoneExpandedDetail"></div></div></section>
+<section class="card milestone-priority" data-page="overview"><button class="cardhead block-toggle" type="button" aria-expanded="true" aria-controls="milestoneBlock" onclick="toggleMilestoneBlock()"><span><span class="section-kicker">FUNDING SEQUENCE</span><h3>Your milestone order</h3><span class="hint">Drag a goal to decide what your money funds first.</span></span><span class="block-chevron">⌄</span></button><div id="milestoneBlock"><div class="priority-list" id="priorityList"></div><div class="priority-note">The cards shift in place when you reorder them. Each completed goal uses its budget before the next goal is funded, so the dates update automatically.</div><button class="priority-next" type="button" onclick="selectPage('goals')">Edit goal budgets →</button><div id="milestoneExpandedDetail"></div></div></section>
 <dialog id="plannerDialog" class="life-dialog"><button class="dialog-close" type="button" onclick="closePlannerDialog()" aria-label="Close">×</button><div id="plannerDialogBody"></div></dialog>
 <div class="grid"><section class="card" data-page="overview"><div class="cardhead"><div><h3>Your money over time</h3><div class="hint">Projected savings + farm value</div></div><button class="screen-shortcut" type="button" onclick="selectPage('plan')">EDIT ASSUMPTIONS&nbsp; →</button></div><div class="metricrow"><div class="metric"><label>Monthly take-home</label><strong id="mSalary">₱—</strong><span>after tax & deductions</span></div><div class="metric"><label>Monthly surplus</label><strong id="mInvest">₱—</strong><span>income less living costs</span></div><div class="metric"><label>Farm value in 5 yrs</label><strong id="mFarm">₱—</strong><span>with reinvested returns</span></div></div><div class="timeline-wrap"><div id="milestoneTimeline" class="milestone-timeline" aria-label="Milestone timeline"></div></div><input type="hidden" id="cashSplit" value="25"><div class="reserve-panel"><div><b>Protected emergency fund</b><div class="hint">Set your own target. This amount is reserved before milestone funding is calculated.</div></div><div class="reserve-input"><span>₱</span><input id="safetyReserve" type="number" value="" placeholder="Your target" step="10000" min="0" inputmode="numeric" aria-label="Emergency fund target in pesos"></div><div class="reserve-status" id="reserveStatus">No emergency fund target set yet.</div></div></section>
 <section id="events" class="card" data-page="goals"><div class="cardhead"><div><h3>Life milestones</h3><div class="hint">When each goal may be within reach</div></div><div style="display:flex;gap:12px;align-items:center"><button class="toggle" type="button" onclick="toggleAddGoal()" id="addGoalBtn">+ ADD MILESTONE</button><button class="toggle" type="button" onclick="toggleEdit()" id="editBtn">EDIT BUDGETS</button></div></div><form class="milestone-form" id="milestoneForm" hidden onsubmit="addGoal(event)"><div class="field"><label for="newGoalName">Milestone name</label><input id="newGoalName" maxlength="40" placeholder="e.g. Buy a car" required></div><div class="field"><label for="newGoalKind">Description</label><input id="newGoalKind" maxlength="55" placeholder="e.g. Transportation"></div><div class="field"><label for="newGoalIcon">Icon</label><input id="newGoalIcon" maxlength="4" value="☆" aria-label="Milestone icon"></div><div class="field"><label for="newGoalCost">Target budget (₱)</label><input id="newGoalCost" type="number" min="0" step="1000" placeholder="0" required></div><button type="submit">Add goal</button></form><div class="event-list" id="eventList"></div><div class="recommend" id="eventNote"><b>Your plan, your pace.</b> Estimates reflect the goals and assumptions you set below.</div></section></div>
@@ -131,6 +131,72 @@ main{padding-top:34px}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode/1.5.4/qrcode.min.js" referrerpolicy="no-referrer"></script>
 
 <style>
+/* iPhone layout correction: stable two-row horizontal planner rail */
+@media(max-width:760px){
+ .planner-section{width:100%;min-width:0;overflow:visible!important}
+ .planner-section #plannerBlock{width:100%;min-width:0}
+ .planner-section .planner-grid,
+ .planner-section .planner-grid.is-dragging{
+  display:grid!important;
+  grid-auto-flow:column!important;
+  grid-template-rows:repeat(2,92px)!important;
+  grid-auto-columns:calc(100% - 2px)!important;
+  grid-template-columns:none!important;
+  grid-auto-rows:92px!important;
+  gap:9px 10px!important;
+  width:100%!important;
+  height:193px!important;
+  max-height:193px!important;
+  overflow-x:auto!important;
+  overflow-y:hidden!important;
+  overscroll-behavior-x:contain;
+  overscroll-behavior-y:none;
+  padding:3px 2px 8px!important;
+  scroll-snap-type:x mandatory!important;
+  scroll-behavior:smooth;
+  -webkit-overflow-scrolling:touch;
+  touch-action:pan-x pan-y!important;
+  scrollbar-width:none
+ }
+ .planner-section .planner-grid::-webkit-scrollbar{display:none}
+ .planner-section .planner-tile{
+  display:grid!important;
+  grid-template-columns:28px 36px minmax(0,1fr) 10px!important;
+  grid-column:auto!important;
+  flex:none!important;
+  width:auto!important;
+  min-width:0!important;
+  min-height:88px!important;
+  height:88px!important;
+  padding:9px 8px!important;
+  gap:7px!important;
+  scroll-snap-align:start;
+  border:1px solid #dce7dd!important;
+  border-radius:14px!important;
+  background:#fbfdfb!important;
+  box-shadow:0 2px 7px #244a3210!important;
+  overflow:hidden
+ }
+ .planner-section .planner-handle{display:grid!important;place-items:center;width:25px;height:34px;font-size:15px!important;touch-action:none!important;cursor:grab}
+ .planner-section .planner-icon{width:34px!important;height:34px!important;border-radius:11px!important;background:#edf5ee!important}
+ .planner-section .planner-icon svg{width:23px!important;height:23px!important}
+ .planner-section .planner-copy{min-width:0}
+ .planner-section .planner-copy b{font-size:12px!important;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+ .planner-section .planner-copy small{font-size:9px!important;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+ .planner-section .planner-arrow{font-size:17px!important}
+ .planner-add-row{margin:7px 2px 0}
+ .milestone-priority{width:100%;min-width:0}
+ .milestone-priority #milestoneBlock[hidden]{display:none!important}
+ .milestone-priority #milestoneBlock:not([hidden]){display:block!important}
+ .milestone-priority .priority-list{max-height:246px!important;overflow-y:auto!important;overflow-x:hidden!important}
+ .milestone-priority .priority-list:has(.priority-item.has-detail){max-height:none!important;overflow:visible!important}
+ .milestone-priority .priority-item.has-detail{grid-template-columns:24px 20px 30px minmax(0,1fr) auto!important}
+ .milestone-priority .priority-detail{grid-column:1/-1!important;width:100%!important;max-width:100%!important;min-width:0!important;box-sizing:border-box!important;margin:10px 0 0!important;padding:14px!important;overflow:visible!important}
+ .milestone-priority .priority-detail .calc-summary{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:7px!important;width:100%!important}
+ .milestone-priority .priority-detail .calc-stat{min-width:0!important;padding:9px!important;overflow-wrap:anywhere}
+ .milestone-priority .priority-detail .calc-table-wrap{width:100%!important;max-width:100%!important;overflow-x:auto!important;max-height:45vh}
+ .milestone-priority .priority-detail .calc-table{min-width:620px}
+}
 </style>
 
 
