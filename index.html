@@ -1090,6 +1090,18 @@ main .planner-section #plannerGrid>.planner-tile:active{filter:brightness(.94)}
 #plannerPreview .planner-drag-handle:active span{width:54px;transition:width .16s ease}
 @media(prefers-reduced-motion:reduce){#plannerPreview.planner-preview,#plannerPreview.planner-preview.is-open{transition:none!important}}
 </style>
+<style id="planner-focus-mode">
+/* When a planner is open, remove app navigation so the selected workspace stands alone */
+body.planner-overlay-open .mobile-nav,
+body.planner-overlay-open .sidebar{display:none!important}
+body.planner-overlay-open .shell{display:block!important;max-width:none!important;min-height:100dvh!important}
+body.planner-overlay-open main{width:100%!important;min-width:0!important;padding:0!important;margin:0!important}
+body.planner-overlay-open #plannerPreview{z-index:2147483000!important}
+@media(max-width:760px){
+ body.planner-overlay-open .mobile-nav{display:none!important;visibility:hidden!important;pointer-events:none!important}
+ body.planner-overlay-open main{padding:0!important}
+}
+</style>
 <style id="planner-final-phone-fit">
 #plannerPreview .planner-preview-close{display:none!important}
 #plannerPreview.planner-preview.is-salary .planner-preview-inner{padding:0!important;min-height:100dvh!important}
