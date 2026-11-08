@@ -133,7 +133,8 @@ main .planner-section #plannerGrid>.planner-tile .planner-copy b{color:inherit!i
 </style>
 <body><div class="shell"><aside class="sidebar"><div class="brand"><div class="mark">↗</div>lifeplan</div><div class="navlabel">YOUR PLAN</div><nav class="nav"><a class="active" href="#"><span class="ico">◫</span>Overview</a><a href="#events"><span class="ico">◷</span>Life milestones</a><a href="#strategy"><span class="ico">⌁</span>Money strategy</a><a href="#farm"><span class="ico">♧</span>Farm & assets</a></nav><div class="side-note"><b>A plan that grows with you</b>Explore what feels possible. Every number is yours to adjust.</div><div class="profile"><div class="avatar">M</div><div><b>My plan</b><br><small>Personal workspace</small></div></div></aside>
 <main id="top"><section class="page-hero" data-page="overview"><div class="page-hero-mark">✦</div><div><div class="page-hero-kicker">YOUR LIFE, YOUR PLAN</div><h1 class="hello">Life Planner</h1><p class="sub">Your future, in view. Plan your goals, money, and milestones in one place.</p></div><span class="page-hero-orbit" aria-hidden="true"></span></section>
-<div class="metricrow home-metrics" data-page="overview" aria-live="polite"><button class="metric metric-button usable-metric" type="button" id="usableCard" aria-expanded="false" onclick="toggleHomeDetail('usable')"><label>Usable assets</label><strong id="usableTotal">₱—</strong><span>Available for your milestones · View details</span></button><button class="metric metric-button" type="button" id="reserveCard" aria-expanded="false" onclick="toggleHomeDetail('reserve')"><label>Emergency fund</label><strong id="homeReserve">Not set</strong><span>Your protected target · View details</span></button><button class="metric metric-button" type="button" id="worthCard" aria-expanded="false" onclick="toggleHomeDetail('worth')"><label>Net worth</label><strong id="netWorth">₱—</strong><span>After recorded loans · View details</span></button></div><section class="planner-section" data-page="overview">
+<div class="metricrow home-metrics" data-page="overview" aria-live="polite"><button class="metric metric-button usable-metric" type="button" id="usableCard" aria-expanded="false" onclick="toggleHomeDetail('usable')"><label>Usable assets</label><strong id="usableTotal">₱—</strong><span>Available for your milestones · View details</span></button><button class="metric metric-button" type="button" id="reserveCard" aria-expanded="false" onclick="toggleHomeDetail('reserve')"><label>Emergency fund</label><strong id="homeReserve">Not set</strong><span>Your protected target · View details</span></button><button class="metric metric-button" type="button" id="worthCard" aria-expanded="false" onclick="toggleHomeDetail('worth')"><label>Net worth</label><strong id="netWorth">₱—</strong><span>After recorded loans · View details</span></button></div>
+<section class="planner-section" data-page="overview">
  <div id="plannerBlock">
  <div class="planner-grid" id="plannerGrid">
   <button class="planner-tile" type="button" data-planner="salary" onclick="openPlannerFromCard(event,'salary')"><span class="planner-copy"><b>Salary</b></span></button>
@@ -146,7 +147,6 @@ main .planner-section #plannerGrid>.planner-tile .planner-copy b{color:inherit!i
   </div>
  </div>
 </section>
-<div class="breakdown home-detail" data-page="overview" id="homeDetail" hidden></div>
 <section class="card milestone-priority" data-page="overview"><button class="cardhead block-toggle" type="button" aria-expanded="false" aria-controls="milestoneBlock" onclick="toggleMilestoneBlock()"><span><span class="section-kicker">FUNDING SEQUENCE</span><h3>Your milestone order</h3><span class="hint">Drag a goal to decide what your money funds first.</span></span><span class="block-chevron">⌄</span></button><div id="milestoneBlock" hidden><div class="priority-list" id="priorityList"></div><div class="priority-note">The cards shift in place when you reorder them. Each completed goal uses its budget before the next goal is funded, so the dates update automatically.</div><button class="priority-next" type="button" onclick="selectPage('goals')">Edit goal budgets →</button><div id="milestoneExpandedDetail"></div></div></section>
 <dialog id="plannerDialog" class="life-dialog"><button class="dialog-close" type="button" onclick="closePlannerDialog()" aria-label="Close">×</button><div id="plannerDialogBody"></div></dialog>
 <section class="card timeline-only-card" data-page="overview">
@@ -714,6 +714,43 @@ main .planner-section #plannerGrid>.planner-tile:active{transform:scale(.985)!im
  .page-hero{padding:16px 15px!important;margin-bottom:10px!important;border-radius:13px!important}
  .page-hero .hello{font-size:23px!important}
  .milestone-expanded-detail{margin:7px 0 12px!important;padding:11px!important}
+}
+</style>
+
+<style id="home-layout-header-and-color-refinement">
+/* Refined compact page header */
+.page-hero{
+ display:flex!important;align-items:flex-end!important;justify-content:space-between!important;
+ min-height:0!important;padding:19px 20px 17px!important;margin:0 0 12px!important;
+ border:0!important;border-left:4px solid #28644c!important;border-radius:3px 12px 12px 3px!important;
+ background:#e9eee9!important;color:#202b27!important;box-shadow:none!important;gap:12px!important
+}
+.page-hero-mark,.page-hero-orbit{display:none!important}
+.page-hero-kicker{color:#536b5d!important;font-size:9px!important;letter-spacing:1.7px!important}
+.page-hero .hello{color:#202b27!important;font-size:clamp(22px,5vw,28px)!important;line-height:1.12!important;letter-spacing:-.8px!important;margin:5px 0 4px!important}
+.page-hero .sub{color:#66736b!important;font-size:11px!important;line-height:1.4!important}
+@media(max-width:760px){.page-hero{padding:16px 15px 15px!important;margin-bottom:9px!important}.page-hero .hello{font-size:23px!important}}
+/* Detail expands between the summary and planners, pushing planners down naturally */
+#homeDetail{position:relative!important;z-index:1!important;width:100%!important;margin:7px 0 10px!important;padding:12px 14px!important;border:1px solid #d8dfd9!important;border-radius:11px!important;background:#fff!important;box-shadow:none!important}
+#homeDetail[hidden]{display:none!important}
+.planner-section[data-page="overview"]{margin:5px 0 8px!important}
+/* Replace pastel planner tiles with deeper, restrained color shades */
+main .planner-section #plannerGrid>.planner-tile:nth-child(1){background:#e1e9f2!important;border-color:#c5d3e2!important;color:#294b70!important}
+main .planner-section #plannerGrid>.planner-tile:nth-child(2){background:#e9e2ef!important;border-color:#d1c3df!important;color:#57406e!important}
+main .planner-section #plannerGrid>.planner-tile:nth-child(3){background:#e1eae2!important;border-color:#c4d4c6!important;color:#35583d!important}
+main .planner-section #plannerGrid>.planner-tile:nth-child(4){background:#eee4d9!important;border-color:#d9c6b2!important;color:#704c2e!important}
+main .planner-section #plannerGrid>.planner-tile:nth-child(5){background:#dfeaec!important;border-color:#bfd3d5!important;color:#315b60!important}
+main .planner-section #plannerGrid>.planner-tile:nth-child(6){background:#eee1e2!important;border-color:#dcc3c6!important;color:#70434b!important}
+/* Tighten funding sequence to timeline spacing without hiding content */
+main .milestone-priority[data-page="overview"]{margin:5px 0 5px!important}
+main .milestone-priority .cardhead{margin-bottom:5px!important;padding-bottom:7px!important}
+.timeline-only-card{margin-top:0!important;padding-top:5px!important}
+.timeline-only-card .timeline-wrap{padding-top:7px!important;padding-bottom:6px!important}
+@media(max-width:760px){
+ #homeDetail{margin:5px 0 8px!important;padding:10px 11px!important}
+ main .milestone-priority[data-page="overview"]{margin:4px 0 3px!important}
+ .timeline-only-card{padding-top:3px!important}
+ .timeline-only-card .timeline-wrap{padding-top:5px!important;padding-bottom:4px!important}
 }
 </style>
 </body></html>
