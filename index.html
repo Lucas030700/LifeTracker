@@ -641,4 +641,54 @@ main .planner-section #plannerGrid>.planner-add-end{display:none!important}
 main .milestone-priority[data-page="overview"]{clear:both!important;margin:5px 0 10px!important;position:relative!important}
 @media(max-width:760px){main{row-gap:7px!important}main .planner-section[data-page="overview"]{margin:1px 0 4px!important}main .milestone-priority[data-page="overview"]{margin-top:3px!important}}
 </style>
+
+<style id="iphone-aesthetic-symmetry">
+/* Balanced, minimal planner ribbon */
+main .planner-section[data-page="overview"]{width:100%!important;margin:5px 0 10px!important;padding:0!important}
+main .planner-section #plannerGrid{
+ display:flex!important;flex-flow:row nowrap!important;align-items:stretch!important;
+ width:100%!important;height:39px!important;min-height:39px!important;max-height:39px!important;
+ gap:7px!important;margin:0!important;padding:1px 0 3px!important;
+ overflow-x:auto!important;overflow-y:hidden!important;scroll-snap-type:x mandatory!important;
+ -webkit-overflow-scrolling:touch!important;scrollbar-width:none!important
+}
+main .planner-section #plannerGrid::-webkit-scrollbar{display:none!important}
+main .planner-section #plannerGrid>.planner-tile{
+ box-sizing:border-box!important;display:flex!important;flex:0 0 calc((100% - 14px)/3)!important;
+ width:calc((100% - 14px)/3)!important;min-width:calc((100% - 14px)/3)!important;
+ max-width:calc((100% - 14px)/3)!important;height:34px!important;min-height:34px!important;
+ max-height:34px!important;margin:0!important;padding:0 5px!important;gap:0!important;
+ align-items:center!important;justify-content:center!important;text-align:center!important;
+ border:1px solid transparent!important;border-radius:9px!important;box-shadow:none!important;
+ scroll-snap-align:start!important;overflow:hidden!important
+}
+main .planner-section #plannerGrid>.planner-tile:nth-child(1){background:#edf3fb!important;border-color:#dce7f5!important;color:#365a82!important}
+main .planner-section #plannerGrid>.planner-tile:nth-child(2){background:#f2eef9!important;border-color:#e4daf3!important;color:#674f88!important}
+main .planner-section #plannerGrid>.planner-tile:nth-child(3){background:#edf4ef!important;border-color:#dce9df!important;color:#416b50!important}
+main .planner-section #plannerGrid>.planner-tile:nth-child(4){background:#f8f0e9!important;border-color:#eee0d2!important;color:#896044!important}
+main .planner-section #plannerGrid>.planner-tile:nth-child(5){background:#eaf3f4!important;border-color:#d8e9ea!important;color:#3e6e72!important}
+main .planner-section #plannerGrid>.planner-tile:nth-child(6){background:#f7edef!important;border-color:#ecdde1!important;color:#865764!important}
+main .planner-section #plannerGrid>.planner-tile .planner-copy{display:block!important;flex:1 1 100%!important;width:100%!important;min-width:0!important;text-align:center!important}
+main .planner-section #plannerGrid>.planner-tile .planner-copy b{margin:0!important;color:inherit!important;font-size:10px!important;font-weight:700!important;line-height:1!important;white-space:nowrap!important}
+main .planner-section #plannerGrid>.planner-tile:active{transform:scale(.985)!important;filter:brightness(.98)}
+/* Timeline: equal-width cards with consistent spacing and readable hierarchy */
+.timeline-only-card{width:100%!important;box-sizing:border-box!important;padding:14px!important;border:1px solid #e3eae4!important;border-radius:17px!important;background:#fff!important;overflow:hidden!important}
+.timeline-only-card .timeline-wrap{width:100%!important;box-sizing:border-box!important;margin:0!important;padding:13px 2px 12px!important;overflow-x:auto!important}
+.timeline-only-card .milestone-timeline{align-items:stretch!important;gap:10px!important;padding:0 2px 3px!important}
+.timeline-only-card .milestone-timeline:before{left:17px!important;right:17px!important;top:12px!important}
+.timeline-only-card .timeline-stop{box-sizing:border-box!important;flex:0 0 138px!important;width:138px!important;min-height:148px!important;padding:0 10px 11px!important;border:1px solid #e7ece8!important;border-radius:12px!important;background:#fbfcfb!important;scroll-snap-align:start!important}
+.timeline-only-card .timeline-dot{width:20px!important;height:20px!important;margin:7px 0 10px!important;border-width:4px!important}
+.timeline-only-card .timeline-date{font-size:10px!important;line-height:1.25!important;letter-spacing:.2px!important}
+.timeline-only-card .timeline-name{font-size:12px!important;line-height:1.3!important;min-height:30px!important;margin-top:5px!important;overflow-wrap:anywhere}
+.timeline-only-card .timeline-kind{font-size:9px!important;line-height:1.35!important;min-height:24px!important}
+.timeline-only-card .timeline-budget{font-size:9px!important;line-height:1.3!important;margin-top:7px!important}
+.timeline-only-card .timeline-budget b{font-size:11px!important;line-height:1.25!important}
+.timeline-only-card .timeline-status{font-size:9px!important;line-height:1.35!important;margin-top:5px!important}
+.timeline-only-card .timeline-sequence{margin-top:7px!important;font-size:8px!important}
+@media(max-width:430px){
+ main .planner-section[data-page="overview"]{margin:4px 0 9px!important}
+ .timeline-only-card{padding:12px!important;border-radius:15px!important}
+ .timeline-only-card .timeline-stop{flex-basis:132px!important;width:132px!important;min-height:146px!important}
+}
+</style>
 </body></html>
