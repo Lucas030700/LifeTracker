@@ -2955,14 +2955,23 @@ main.content-main{
 
 <script>
 (()=> {
+ // Embedded mode must size to its content, not to the iframe viewport.
+ document.documentElement.style.setProperty('min-height','0','important');
+ document.body.style.setProperty('min-height','0','important');
+ let lastHeight=0,queued=false;
  const sendHeight=()=>{
-  const height=Math.max(document.documentElement.scrollHeight,document.body?.scrollHeight||0);
+  queued=false;
+  const height=Math.ceil(document.body?.scrollHeight||0);
+  if(!height||Math.abs(height-lastHeight)<3)return;
+  lastHeight=height;
   parent.postMessage({type:'lifeTrackerSalaryHeight',height},location.origin);
  };
- window.addEventListener('load',sendHeight);
- if('ResizeObserver' in window)new ResizeObserver(sendHeight).observe(document.body);
- window.addEventListener('resize',sendHeight);
- document.addEventListener('click',()=>requestAnimationFrame(sendHeight),true);
+ const schedule=()=>{if(queued)return;queued=true;requestAnimationFrame(sendHeight)};
+ window.addEventListener('load',schedule);
+ if('ResizeObserver' in window)new ResizeObserver(schedule).observe(document.body);
+ window.addEventListener('resize',schedule);
+ document.addEventListener('click',schedule,true);
+ schedule();
 })();
 </script>
 \n</body>
