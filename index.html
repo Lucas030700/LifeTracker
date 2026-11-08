@@ -428,7 +428,7 @@ function removeCropRecord(id){const r=farmHistory.find(x=>x.id===id);if(!r||!win
 function updateAsset(id,key,value){let a=assets.find(x=>x.id===id);if(!a)return;a[key]=Math.max(0,Number(value)||0);draw()}
 function recordSale(id){let a=assets.find(x=>x.id===id&&!x.sold);if(!a)return;let proceeds=Math.max(0,Number(a.value)-Number(a.debt));document.getElementById('savings').value=val('savings')+proceeds;a.sold=true;a.saleAmount=proceeds;draw()}
 function removeAsset(id){let a=assets.find(x=>x.id===id);if(!a)return;if(!window.confirm(`Remove “${a.name}” from your asset list? This also removes it from your totals.`))return;assets=assets.filter(x=>x.id!==id);draw()}
-function selectPage(page){activePage=page;const mobile=window.matchMedia('(max-width: 760px)').matches;document.body.classList.toggle('is-mobile',mobile);document.querySelectorAll('main [data-page]').forEach(el=>el.classList.toggle('page-hidden',el.dataset.page!==activePage));const navPage=activePage==='assumptions'?'plan':activePage==='farm-plan'?'farm':activePage;document.querySelectorAll('.mobile-nav button').forEach(btn=>btn.classList.toggle('active',btn.dataset.page===navPage));const labels={overview:'Overview',goals:'Goals',plan:'Plan',assumptions:'Plan',farm:'Farm history','farm-plan':'Farm plan',assets:'Assets'};const crumbEl=document.querySelector('.crumb');if(crumbEl)crumbEl.textContent='My workspace / '+(labels[activePage]||'Overview')}
+function selectPage(page){activePage=page;const mobile=window.matchMedia('(max-width: 760px)').matches;document.body.classList.toggle('is-mobile',mobile);document.querySelectorAll('main [data-page]').forEach(el=>{const visible=el.dataset.page===activePage;el.classList.toggle('page-hidden',!visible);if(visible)el.style.removeProperty('display');else el.style.setProperty('display','none','important')});const navPage=activePage==='assumptions'?'plan':activePage==='farm-plan'?'farm':activePage;document.querySelectorAll('.mobile-nav button').forEach(btn=>btn.classList.toggle('active',btn.dataset.page===navPage));const labels={overview:'Overview',goals:'Goals',plan:'Plan',assumptions:'Plan',farm:'Farm history','farm-plan':'Farm plan',assets:'Assets'};const crumbEl=document.querySelector('.crumb');if(crumbEl)crumbEl.textContent='My workspace / '+(labels[activePage]||'Overview')}
 function setAssetPage(page){assetPage=Math.max(0,Math.min(page,Math.ceil(assets.length/3)-1));renderAssets()}
 function setCropPage(page){cropPage=Math.max(0,Math.min(page,Math.ceil(farmHistory.length/2)-1));renderCropHistory()}
 
@@ -942,5 +942,22 @@ main [data-page].page-hidden{display:none!important}
 .priority-item .priority-date{grid-column:4!important}
 .priority-item .priority-progress{grid-column:3/4!important}
 .priority-item .priority-percent{grid-column:4!important}
+</style>
+
+<style id="navy-blue-theme-and-strict-page-isolation">
+:root{--green:#18365b;--green-dark:#102744;--green-soft:#e8eef5;--sage:#dce5ee;--gold:#9aabc0}
+.planner-section #plannerGrid>.planner-tile,
+.planner-section #plannerGrid>.planner-tile:nth-child(n){
+ background:linear-gradient(145deg,#254a73 0%,#142f50 100%)!important;
+ border:1px solid #91a9c4!important;color:#f7f9fc!important;
+ box-shadow:0 2px 6px rgba(16,39,68,.15)!important
+}
+.planner-section #plannerGrid>.planner-tile .planner-copy b{color:#f7f9fc!important}
+.planner-section #plannerGrid>.planner-tile.is-selected{outline-color:#a9bfd8!important}
+.planner-section .planner-scroll-track{background:#dce5ee!important}
+.planner-section .planner-scroll-track i,.planner-section .planner-scroll-cue b{background:#8da8c6!important;color:#8da8c6!important}
+.planner-section .planner-preview h3,.planner-section .planner-preview-empty b{color:#254a73!important}
+.planner-section .planner-preview-close,.planner-section .planner-preview-mark{background:#e8eef5!important;color:#254a73!important}
+main [data-page].page-hidden{display:none!important}
 </style>
 </body></html>
