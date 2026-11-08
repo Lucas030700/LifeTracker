@@ -439,7 +439,7 @@ function endPlannerDismiss(e){
 function renderMilestonePlanners(d){
  const root=document.getElementById('plannerGrid');if(!root)return;
  const current=root.querySelector('.planner-tile.is-selected')?.dataset.planner||'';
- const entries=[{key:'salary',name:'Salary'},...(d.events||[]).map(e=>({key:'milestone:'+encodeURIComponent(e.name),name:e.name}))];
+ const entries=[{key:'salary',name:'Salary'},{key:'travel',name:'Travel'},...(d.events||[]).map(e=>({key:'milestone:'+encodeURIComponent(e.name),name:e.name}))];
  root.innerHTML=entries.map(e=>'<button class="planner-tile" type="button" data-planner="'+esc(e.key)+'" aria-expanded="false" onclick="openPlannerFromCard(event,\''+esc(e.key)+'\')"><span class="planner-copy"><b>'+esc(e.name)+'</b></span></button>').join('');
  if(current&&entries.some(e=>e.key===current)){const tile=root.querySelector('[data-planner="'+CSS.escape(current)+'"]');if(tile)tile.setAttribute('aria-expanded','true')}
 }
