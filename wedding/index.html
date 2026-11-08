@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#263b32"><title>Wedding Event Planner</title>
+<style>
+:root{--ink:#26372f;--muted:#78847d;--line:#e5eae6;--bg:#f5f7f4;--green:#315d49;--soft:#edf3ee;--white:#fff;--gold:#b28b55}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:13px/1.45 Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,sans-serif}
+header{background:#263b32;color:white;padding:17px clamp(13px,3vw,34px) 15px}header .eyebrow{font-size:9px;letter-spacing:1.7px;text-transform:uppercase;color:#c6d5c9}h1{font-size:clamp(21px,3vw,29px);margin:3px 0;font-weight:760;letter-spacing:-.5px}header p{margin:0;color:#d4dfd7;font-size:11px}
+.wrap{max-width:1100px;margin:auto;padding:12px clamp(10px,2vw,22px) 38px}
+.summary{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}.metric{background:#fff;border:1px solid var(--line);border-radius:10px;padding:9px 11px}.metric small{display:block;color:var(--muted);font-size:10px}.metric strong{display:block;font-size:17px;margin-top:2px;font-variant-numeric:tabular-nums}
+.tabs{display:flex;gap:3px;overflow:auto;margin:13px 0 10px;border-bottom:1px solid var(--line)}.tab{border:0;background:none;padding:8px 11px;color:var(--muted);font-size:12px;font-weight:750;white-space:nowrap;cursor:pointer;border-bottom:2px solid transparent}.tab.active{color:var(--green);border-color:var(--green)}
+.page.hidden{display:none!important}.layout{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(245px,.65fr);gap:10px}.panel{background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px;margin-bottom:10px}.panel h2{font-size:14px;margin:0 0 3px}.sub{font-size:10px;color:var(--muted);margin:0 0 10px}
+.category{border:1px solid var(--line);border-radius:10px;margin:7px 0;overflow:hidden;background:#fff}.cat-head{display:flex;align-items:center;justify-content:space-between;padding:9px 11px;cursor:pointer;background:#fafcf9;font-weight:760;font-size:12px}.cat-head small{font-weight:600;color:var(--muted);font-size:10px}.cat-body{padding:2px 8px 8px}.cat-body.closed{display:none}
+.feature{border:1px solid #e9eeea;border-radius:9px;margin:6px 0;overflow:hidden}.feature-head{display:flex;align-items:center;gap:8px;padding:8px 9px;cursor:pointer;min-height:42px}.feature-head:hover{background:#fbfcfb}.feature-check{width:16px;height:16px;accent-color:var(--green);flex:none}.feature-title{font-weight:700;font-size:11px;flex:1;min-width:0}.feature-summary{font-size:10px;color:var(--muted);white-space:nowrap}.chev{font-size:13px;color:var(--muted);width:14px;text-align:center}.feature-body{display:none;border-top:1px solid #edf1ed;padding:9px;background:#fcfdfc}.feature.open .feature-body{display:block}.feature.open .chev{transform:rotate(180deg)}
+.budget-line{display:grid;grid-template-columns:minmax(0,1fr) 105px;gap:10px;align-items:center;margin:1px 0 10px}.budget-line label,.field label{font-size:10px;color:var(--muted);font-weight:700;display:block;margin-bottom:4px}.range-wrap{display:flex;gap:8px;align-items:center}.range-wrap input[type=range]{width:100%;accent-color:var(--green);padding:0}.money-input{font-weight:700;text-align:right;padding:6px 7px!important;font-size:11px!important}
+.details-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.field{min-width:0}.field input,.field select,.field textarea{width:100%;min-width:0;border:1px solid #dfe6e0;border-radius:7px;padding:7px 8px;background:white;color:var(--ink);font:inherit;font-size:11px}.field textarea{resize:vertical;min-height:54px}.field.full{grid-column:1/-1}
+.repeat-block{border:1px dashed #d8e2da;border-radius:8px;padding:8px;margin:8px 0}.repeat-head{display:flex;justify-content:space-between;align-items:center;font-size:10px;font-weight:750;margin-bottom:6px}.repeat-row{display:grid;grid-template-columns:minmax(0,1fr) 30px;gap:5px;margin:5px 0}.repeat-row input{min-width:0;border:1px solid #dfe6e0;border-radius:7px;padding:7px;font:inherit;font-size:11px}.mini{border:1px solid #dce5dd;border-radius:7px;background:#fff;color:var(--green);font-weight:800;cursor:pointer;padding:4px 8px}.mini.remove{color:#a24e48}.add-row{font-size:10px;padding:5px 8px}
+.row{display:flex;gap:7px;align-items:center}.row>*{flex:1}.btn{border:1px solid #d7e1d9;background:#fff;color:var(--green);border-radius:8px;padding:8px 10px;font-size:11px;font-weight:750;cursor:pointer}.btn.primary{background:var(--green);color:#fff;border-color:var(--green)}.btn.danger{color:#a34d48}.btn.small{padding:5px 8px;font-size:10px}
+.totalbox{background:#f7faf7;border-radius:9px;padding:11px;margin-top:9px}.totalrow{display:flex;justify-content:space-between;gap:10px;padding:4px 0;font-size:11px}.totalrow.big{font-size:17px;font-weight:800;color:var(--green);border-top:1px solid var(--line);margin-top:5px;padding-top:8px}
+.hint{font-size:10px;color:var(--muted)}.actions{display:flex;flex-wrap:wrap;gap:7px;margin-top:9px}.tablewrap{overflow:auto}table{width:100%;border-collapse:collapse;min-width:650px}th,td{text-align:left;padding:8px 6px;border-bottom:1px solid var(--line);font-size:10px}th{color:var(--muted);font-size:9px;text-transform:uppercase}td input,td select{width:100%;padding:6px;border:1px solid var(--line);border-radius:6px;font:inherit}.empty{padding:20px;text-align:center;color:var(--muted);font-size:11px}.hidden{display:none!important}
+@media(max-width:720px){.summary{grid-template-columns:repeat(2,1fr)}.layout{grid-template-columns:1fr}.details-grid{grid-template-columns:1fr 1fr}.wrap{padding-left:9px;padding-right:9px}.panel{padding:10px}.feature-head{gap:6px;padding:8px}.feature-summary{max-width:90px;overflow:hidden;text-overflow:ellipsis}.budget-line{grid-template-columns:minmax(0,1fr) 92px}}
+@media(max-width:380px){.details-grid{grid-template-columns:1fr}.field.full{grid-column:auto}}
+</style></head>
+<body>
+<header><div class="eyebrow">Couple Life Hub · Event planning</div><h1>Wedding Event Planner</h1><p>Build the celebration first. No wedding date needed.</p></header>
+<main class="wrap">
+<section class="summary">
+ <div class="metric"><small>Estimated budget</small><strong id="sumEstimate">₱0</strong></div>
+ <div class="metric"><small>Actual / quoted</small><strong id="sumActual">₱0</strong></div>
+ <div class="metric"><small>Selected features</small><strong id="sumFeatures">0</strong></div>
+ <div class="metric"><small>Expected guests</small><strong id="sumGuests">0</strong></div>
+</section>
+<nav class="tabs"><button class="tab active" data-tab="features">Features</button><button class="tab" data-tab="budget">Budget summary</button><button class="tab" data-tab="settings">Event setup</button></nav>
+<section id="features" class="page">
+<div class="layout"><div class="panel"><h2>Wedding features</h2><p class="sub">Tap a feature to open its own details and budget slider. All feature details start hidden.</p><div id="featureGroups"></div>
+<div class="field"><label>Add custom feature</label><div class="row"><input id="customName" placeholder="e.g. Fire dance performance"><button class="btn" id="addCustom">＋ Add</button></div></div></div>
+<aside><div class="panel"><h2>Event snapshot</h2><div class="field"><label>Expected number of guests</label><input id="guestCount" type="number" min="0" placeholder="e.g. 100"></div><div class="field"><label>Event name (optional)</label><input id="eventLabel" placeholder="Our Wedding Celebration"></div><div class="totalbox"><div class="totalrow"><span>Selected features</span><b id="sideCount">0</b></div><div class="totalrow"><span>Guests</span><b id="sideGuests">0</b></div><div class="totalrow big"><span>Estimated total</span><b id="sideTotal">₱0</b></div></div><div class="actions"><button class="btn primary" id="goBudget">View budget →</button></div></div></aside></div>
+</section>
+<section id="budget" class="page hidden"><div class="panel"><h2>Budget summary</h2><p class="sub">A compact view of selected features, estimates, quotations, deposits and balances.</p><div class="tablewrap"><table><thead><tr><th>Feature</th><th>Type</th><th>Qty</th><th>Estimate</th><th>Actual / quote</th><th>Deposit</th><th>Status</th></tr></thead><tbody id="budgetRows"></tbody></table></div><div id="budgetEmpty" class="empty">Choose features to build your budget.</div><div class="totalbox" style="max-width:390px;margin-left:auto"><div class="totalrow"><span>Estimated total</span><b id="budgetEstimate">₱0</b></div><div class="totalrow"><span>Actual / quoted total</span><b id="budgetActual">₱0</b></div><div class="totalrow"><span>Deposits</span><b id="budgetDeposits">₱0</b></div><div class="totalrow big"><span>Remaining balance</span><b id="budgetBalance">₱0</b></div></div></div></section>
+<section id="settings" class="page hidden"><div class="layout"><div class="panel"><h2>Event setup</h2><p class="sub">Date and timeline are intentionally excluded for now.</p><div class="field"><label>Expected guests</label><input id="guestCount2" type="number" min="0"></div><div class="field"><label>Event name</label><input id="eventLabel2" placeholder="Our Wedding Celebration"></div><div class="field"><label>Notes and ideas</label><textarea id="notes" rows="5" placeholder="Theme, preferences, special requests..."></textarea></div></div><div class="panel"><h2>Backup & data</h2><p class="sub">Export a backup to move your planner to another device.</p><div class="actions"><button class="btn primary" id="exportJson">Export JSON backup</button><button class="btn" id="importJson">Import backup</button><input id="importFile" type="file" accept=".json" class="hidden"></div><div class="actions"><button class="btn" id="exportCsv">Export budget CSV</button><button class="btn danger" id="reset">Reset data</button></div><p class="hint">No login or cloud sync. Your event data is saved in this browser. GitHub hosts the application source, not your private event data.</p></div></div></section>
+<footer class="hint" style="text-align:center;padding:12px">Wedding Event Planner · v1.1 · Compact feature cards · Local autosave</footer>
+</main>
+<script>
+(()=>{
+const KEY='weddingEventPlanner_v11';
+const definitions=[
+{group:'Ceremony',items:[
+{name:'Church / Ceremony Venue',fields:[['Venue name','text'],['Location / address','text'],['Ceremony date','date'],['Start time','time'],['End time','time'],['Contact person','text'],['Contact number','tel'],['Notes','textarea']]},
+{name:'Officiant / Priest / Pastor',fields:[['Officiant type','select',['Priest','Pastor','Judge','Other']],['Father / Pastor name','text'],['Church / organization','text'],['Contact number','tel'],['Honorarium / fee','number'],['Notes','textarea']]},
+{name:'Church Decorations',repeat:'Decoration items',fields:[['Supplier / florist','text'],['Setup time','time'],['Color palette','text'],['Notes','textarea']]},
+{name:'Wedding Flowers / Bouquet',repeat:'Flower arrangements',fields:[['Florist','text'],['Flower style','text'],['Delivery / setup time','time']]},
+{name:'Wedding Rings',fields:[['Jewelry store / supplier','text'],['Material','text'],['Ring sizes','text'],['Engraving details','text'],['Pickup date','date']]},
+{name:'Choir / Ceremony Music',fields:[['Choir / group name','text'],['Contact person','text'],['Selected songs','textarea'],['Performance time','text']]},
+{name:'Ceremony Sound System',fields:[['Provider','text'],['Microphones needed','number'],['Setup time','time'],['Technical notes','textarea']]}
+]},
+{group:'Reception & dining',items:[
+{name:'Reception Venue',fields:[['Venue name','text'],['Location / address','text'],['Venue contact','text'],['Event access time','time'],['Reception start','time'],['Reception end','time'],['Venue capacity','number'],['Inclusions','textarea']]},
+{name:'Catering / Food',fields:[['Caterer / supplier','text'],['Menu selection','textarea'],['Price per guest (₱)','number'],['Meal service time','time'],['Dietary requirements','textarea'],['Food tasting date','date']]},
+{name:'Drinks / Beverage Station',fields:[['Supplier','text'],['Drink menu','textarea'],['Service duration','text'],['Package per guest (₱)','number']]},
+{name:'Wedding Cake',fields:[['Baker / supplier','text'],['Cake design / flavor','text'],['Number of tiers','number'],['Delivery time','time'],['Cake topper details','text']]},
+{name:'Dessert Bar',repeat:'Dessert selections',fields:[['Supplier','text'],['Setup time','time'],['Dietary notes','textarea']]},
+{name:'Tables and Chairs',fields:[['Rental supplier','text'],['Table count','number'],['Seats per table','number'],['Chair count','number'],['Delivery / pickup','text']]},
+{name:'Table Centerpieces',repeat:'Centerpiece designs',fields:[['Supplier','text'],['Theme / materials','text'],['Setup time','time']]},
+{name:'Venue Styling / Decorations',repeat:'Styling elements',fields:[['Stylist / supplier','text'],['Theme','text'],['Setup schedule','time'],['Inclusions','textarea']]}
+]},
+{group:'Entertainment & activities',items:[
+{name:'DJ',fields:[['DJ name / company','text'],['Contact person','text'],['Music preferences','textarea'],['Performance schedule','text'],['Equipment included','text']]},
+{name:'Live Band',fields:[['Band name','text'],['Contact person','text'],['Set list / genre','textarea'],['Number of sets','number'],['Performance schedule','text']]},
+{name:'Host / Emcee',fields:[['Host name','text'],['Contact number','tel'],['Program briefing','date'],['Hosting style','text']]},
+{name:'Dance Performance',repeat:'Performances',fields:[['Group / performer','text'],['Performance type','text'],['Duration (minutes)','number'],['Music / requirements','textarea']]},
+{name:'Fireworks Display',fields:[['Pyrotechnics provider','text'],['Display duration (minutes)','number'],['Preferred show time','time'],['Venue approval / permits','text'],['Safety coordinator','text']]},
+{name:'Photo Booth',fields:[['Provider','text'],['Booth type','text'],['Operating hours','text'],['Print copies / package','text'],['Backdrop design','text']]},
+{name:'LED Wall / Projector',fields:[['AV supplier','text'],['Screen size','text'],['Content / video format','text'],['Setup and test time','time']]},
+{name:'Wedding Games and Activities',repeat:'Games / activities',fields:[['Activity name','text'],['Person in charge','text'],['Materials needed','textarea'],['Program time','time']]},
+{name:'Lights and Effects',fields:[['Lighting supplier','text'],['Effects required','textarea'],['Setup time','time'],['Operator','text']]}
+]},
+{group:'Photo & video',items:[
+{name:'Wedding Photographer',fields:[['Photographer / studio','text'],['Contact number','tel'],['Coverage start','time'],['Coverage end','time'],['Package inclusions','textarea'],['Delivery timeline','text']]},
+{name:'Videographer',fields:[['Videographer / studio','text'],['Contact number','tel'],['Coverage schedule','text'],['Video format / length','text'],['Delivery timeline','text']]},
+{name:'Same-day Edit',fields:[['Editor / team','text'],['Video length','text'],['Music selection','text'],['Playback time','time']]},
+{name:'Pre-wedding Photoshoot',fields:[['Photographer','text'],['Shoot location','text'],['Shoot date','date'],['Concept / outfits','textarea']]},
+{name:'Drone Coverage',fields:[['Drone operator','text'],['Venue permission','text'],['Flight schedule','time'],['Restrictions / safety notes','textarea']]},
+{name:'Wedding Photo Album',fields:[['Album supplier','text'],['Album size','text'],['Number of pages','number'],['Cover design','text']]}
+]},
+{group:'Attire & beauty',items:[
+{name:'Bride Wedding Gown',fields:[['Designer / boutique','text'],['Fitting date','date'],['Pickup date','date'],['Alterations','textarea']]},
+{name:'Groom Suit',fields:[['Tailor / boutique','text'],['Fitting date','date'],['Pickup date','date'],['Style / color','text']]},
+{name:'Bridesmaids Dresses',repeat:'Dress entries',fields:[['Person / dress description','text'],['Fitting date','date'],['Size','text'],['Color','text']]},
+{name:'Groomsmen Attire',repeat:'Attire entries',fields:[['Person / attire description','text'],['Fitting date','date'],['Size','text'],['Color','text']]},
+{name:'Hair and Makeup',fields:[['HMUA / artist','text'],['Trial schedule','date'],['Call time','time'],['People included','number'],['Services included','textarea']]},
+{name:'Accessories',repeat:'Accessories',fields:[['Item','text'],['Supplier','text'],['Owner / wearer','text']]}
+]},
+{group:'Other services',items:[
+{name:'Wedding Invitations',fields:[['Designer / printer','text'],['Invitation style','text'],['Quantity','number'],['Distribution plan','textarea']]},
+{name:'Souvenirs / Giveaways',repeat:'Souvenir items',fields:[['Item / design','text'],['Supplier','text'],['Quantity','number'],['Packaging','text']]},
+{name:'Transportation',repeat:'Vehicles / trips',fields:[['Vehicle / provider','text'],['Pickup location','text'],['Pickup time','time'],['Passenger count','number']]},
+{name:'Guest Accommodation',fields:[['Hotel / accommodation','text'],['Location','text'],['Room count','number'],['Check-in / check-out','text']]},
+{name:'Wedding Coordinator',fields:[['Coordinator / company','text'],['Lead contact','text'],['Service coverage','text'],['Coordination briefing','date'],['Inclusions','textarea']]},
+{name:'Security',fields:[['Security provider','text'],['Number of personnel','number'],['Coverage schedule','text'],['Special instructions','textarea']]},
+{name:'Wedding Car',fields:[['Vehicle / provider','text'],['Pickup location','text'],['Pickup time','time'],['Route / drop-off','text']]},
+{name:'Contingency Fund',fields:[['Purpose / reserve notes','textarea'],['Who approves use?','text']]}
+]}
+];
+const fresh={guestCount:100,eventLabel:'',notes:'',items:{}};let data=load();
+function load(){try{let d=JSON.parse(localStorage.getItem(KEY)||'{}');return {...fresh,...d,items:d.items||{}}}catch(e){return JSON.parse(JSON.stringify(fresh))}}
+function save(){localStorage.setItem(KEY,JSON.stringify(data));render()}
+function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function peso(n){return '₱'+(Number(n)||0).toLocaleString('en-PH',{maximumFractionDigits:0})}
+function get(name){if(!data.items[name])data.items[name]={selected:false,budget:0,actual:0,deposit:0,status:'Not contacted',values:{},repeat:[]};return data.items[name]}
+function sum(){let a=Object.entries(data.items).filter(([n,x])=>x.selected);return {count:a.length,estimate:a.reduce((s,[n,x])=>s+(+x.budget||0),0),actual:a.reduce((s,[n,x])=>s+(+x.actual||0),0),deposit:a.reduce((s,[n,x])=>s+(+x.deposit||0),0)}}
+function fieldHtml(name,def,x,index){let [label,type,opts]=def;let val=x.values[index]??'';let id='f_'+Math.random().toString(36).slice(2);let inp=type==='textarea'?`<textarea data-value="${index}" placeholder="${esc(label)}">${esc(val)}</textarea>`:type==='select'?`<select data-value="${index}"><option value="">Select...</option>${opts.map(o=>`<option ${val===o?'selected':''}>${esc(o)}</option>`).join('')}</select>`:`<input data-value="${index}" type="${type}" value="${esc(val)}" placeholder="${esc(label)}">`;return `<div class="field ${type==='textarea'?'full':''}"><label>${esc(label)}</label>${inp}</div>`}
+function repeatHtml(name,def,x){let rows=x.repeat||[];return `<div class="repeat-block"><div class="repeat-head"><span>${esc(def.repeat)}</span><button class="mini add-row" data-add="${esc(name)}">＋ Add</button></div>${rows.map((r,i)=>`<div class="repeat-row"><input data-repeat="${esc(name)}" data-index="${i}" value="${esc(r)}" placeholder="${esc(def.repeat)} detail"><button class="mini remove" data-remove="${esc(name)}" data-index="${i}">−</button></div>`).join('')||'<div class="hint">No entries yet. Tap + Add to create one.</div>'}</div>`}
+function featureCard(def){let n=def.name,x=get(n);let open=x.open===true;let budget=+x.budget||0;let max=Math.max(50000,Math.ceil(budget/50000)*50000);let fields=def.fields.map((f,i)=>fieldHtml(n,f,x,i)).join('');return `<article class="feature ${open?'open':''}" data-feature="${esc(n)}"><div class="feature-head" data-toggle="${esc(n)}"><input class="feature-check" type="checkbox" data-select="${esc(n)}" ${x.selected?'checked':''} aria-label="Include ${esc(n)}"><span class="feature-title">${esc(n)}</span><span class="feature-summary">${x.selected?peso(budget):'Not selected'}</span><span class="chev">⌄</span></div><div class="feature-body"><div class="budget-line"><div><label>Estimated budget · ${peso(budget)}</label><div class="range-wrap"><input data-budget-range="${esc(n)}" type="range" min="0" max="${max}" step="500" value="${Math.min(budget,max)}"></div></div><div><label>Exact amount (₱)</label><input class="money-input" data-budget-number="${esc(n)}" type="number" min="0" step="100" value="${budget}"></div></div>${def.repeat?repeatHtml(n,def,x):''}<div class="details-grid">${fields}</div><div class="details-grid" style="margin-top:8px"><div class="field"><label>Actual / quoted amount (₱)</label><input data-actual="${esc(n)}" type="number" min="0" value="${x.actual||''}" placeholder="0"></div><div class="field"><label>Deposit paid (₱)</label><input data-deposit="${esc(n)}" type="number" min="0" value="${x.deposit||''}" placeholder="0"></div><div class="field full"><label>Supplier / payment status</label><select data-status="${esc(n)}">${['Not contacted','For quotation','Quoted','Booked','Partially paid','Paid'].map(s=>`<option ${x.status===s?'selected':''}>${s}</option>`).join('')}</select></div></div></div></article>`}
+function renderFeatures(){let root=document.getElementById('featureGroups');root.innerHTML=definitions.map((g,gi)=>{let count=g.items.filter(d=>get(d.name).selected).length;return `<section class="category"><div class="cat-head" data-cat="${gi}"><span>${esc(g.group)}</span><small>${count} selected　＋</small></div><div class="cat-body closed">${g.items.map(featureCard).join('')}</div></section>`}).join('');
+Object.entries(data.items).filter(([n,x])=>x.custom).forEach(([n,x])=>{let def={name:n,fields:[['Description / details','textarea']]};root.insertAdjacentHTML('beforeend',`<section class="category"><div class="cat-head" data-customcat="${esc(n)}"><span>Custom feature</span><small>1 item　＋</small></div><div class="cat-body closed">${featureCard(def)}</div></section>`)});
+root.querySelectorAll('[data-cat]').forEach(el=>el.onclick=()=>el.nextElementSibling.classList.toggle('closed'));root.querySelectorAll('[data-customcat]').forEach(el=>el.onclick=()=>el.nextElementSibling.classList.toggle('closed'));
+root.querySelectorAll('[data-toggle]').forEach(el=>el.onclick=e=>{if(e.target.matches('input'))return;let x=get(el.dataset.toggle);x.open=!x.open;renderFeatures()});
+root.querySelectorAll('[data-select]').forEach(el=>el.onchange=()=>{get(el.dataset.select).selected=el.checked;save()});
+root.querySelectorAll('[data-budget-range]').forEach(el=>el.oninput=()=>{let x=get(el.dataset.budgetRange);x.budget=+el.value;let num=root.querySelector(`[data-budget-number="${CSS.escape(el.dataset.budgetRange)}"]`);if(num)num.value=x.budget;let card=el.closest('.feature');card.querySelector('.budget-line label').textContent='Estimated budget · '+peso(x.budget);card.querySelector('.feature-summary').textContent=x.selected?peso(x.budget):'Not selected';updateTotals()});
+root.querySelectorAll('[data-budget-number]').forEach(el=>el.onchange=()=>{let x=get(el.dataset.budgetNumber);x.budget=+el.value||0;save()});
+root.querySelectorAll('[data-value]').forEach(el=>el.onchange=()=>{let x=get(el.closest('.feature').dataset.feature);x.values[el.dataset.value]=el.value;localStorage.setItem(KEY,JSON.stringify(data))});
+root.querySelectorAll('[data-add]').forEach(el=>el.onclick=()=>{get(el.dataset.add).repeat.push('');save()});
+root.querySelectorAll('[data-repeat]').forEach(el=>el.onchange=()=>{get(el.dataset.repeat).repeat[+el.dataset.index]=el.value;localStorage.setItem(KEY,JSON.stringify(data))});
+root.querySelectorAll('[data-remove]').forEach(el=>el.onclick=()=>{let x=get(el.dataset.remove);x.repeat.splice(+el.dataset.index,1);save()});
+root.querySelectorAll('[data-actual]').forEach(el=>el.onchange=()=>{get(el.dataset.actual).actual=+el.value||0;save()});
+root.querySelectorAll('[data-deposit]').forEach(el=>el.onchange=()=>{get(el.dataset.deposit).deposit=+el.value||0;save()});
+root.querySelectorAll('[data-status]').forEach(el=>el.onchange=()=>{get(el.dataset.status).status=el.value;save()});
+}
+function renderBudget(){let a=Object.entries(data.items).filter(([n,x])=>x.selected);let body=document.getElementById('budgetRows');body.innerHTML=a.map(([n,x])=>`<tr><td><b>${esc(n)}</b></td><td>${x.custom?'Custom':'Event'}</td><td class="right">${peso(x.budget)}</td><td class="right">${peso(x.actual)}</td><td class="right">${peso(x.deposit)}</td><td>${esc(x.status)}</td></tr>`).join('');document.getElementById('budgetEmpty').classList.toggle('hidden',a.length>0);let t=sum();document.getElementById('budgetEstimate').textContent=peso(t.estimate);document.getElementById('budgetActual').textContent=peso(t.actual);document.getElementById('budgetDeposits').textContent=peso(t.deposit);document.getElementById('budgetBalance').textContent=peso(t.actual-t.deposit)}
+function updateTotals(){let t=sum();['sumEstimate','sideTotal'].forEach(id=>document.getElementById(id).textContent=peso(t.estimate));document.getElementById('sumActual').textContent=peso(t.actual);document.getElementById('sumFeatures').textContent=t.count;document.getElementById('sumGuests').textContent=+data.guestCount||0;document.getElementById('sideCount').textContent=t.count;document.getElementById('sideGuests').textContent=+data.guestCount||0}
+function render(){document.getElementById('guestCount').value=data.guestCount??'';document.getElementById('guestCount2').value=data.guestCount??'';document.getElementById('eventLabel').value=data.eventLabel||'';document.getElementById('eventLabel2').value=data.eventLabel||'';document.getElementById('notes').value=data.notes||'';renderFeatures();renderBudget();updateTotals()}
+function setGuests(v){data.guestCount=Math.max(0,+v||0);save()}
+['guestCount','guestCount2'].forEach(id=>document.getElementById(id).onchange=e=>setGuests(e.target.value));
+['eventLabel','eventLabel2'].forEach(id=>document.getElementById(id).onchange=e=>{data.eventLabel=e.target.value;save()});document.getElementById('notes').onchange=e=>{data.notes=e.target.value;localStorage.setItem(KEY,JSON.stringify(data))};
+document.getElementById('addCustom').onclick=()=>{let n=document.getElementById('customName').value.trim();if(!n)return;if(!data.items[n])data.items[n]={selected:true,budget:0,actual:0,deposit:0,status:'Not contacted',values:{},repeat:[],custom:true,open:true};else{data.items[n].selected=true;data.items[n].open=true}document.getElementById('customName').value='';save()};
+document.getElementById('goBudget').onclick=()=>document.querySelector('[data-tab=budget]').click();
+document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>{document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('active',x===b));document.querySelectorAll('.page').forEach(p=>p.classList.toggle('hidden',p.id!==b.dataset.tab));if(b.dataset.tab==='budget')renderBudget()});
+function download(name,content,type){let blob=new Blob([content],{type}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=name;a.click();URL.revokeObjectURL(url)}
+document.getElementById('exportJson').onclick=()=>download('wedding-event-planner-backup.json',JSON.stringify(data,null,2),'application/json');
+document.getElementById('importJson').onclick=()=>document.getElementById('importFile').click();
+document.getElementById('importFile').onchange=async e=>{try{let d=JSON.parse(await e.target.files[0].text());if(!d.items)throw Error();data={...fresh,...d};save();alert('Backup imported.')}catch(err){alert('Invalid planner backup.')}e.target.value=''};
+document.getElementById('exportCsv').onclick=()=>{let a=[['Feature','Budget','Actual / quote','Deposit','Status'],...Object.entries(data.items).filter(([n,x])=>x.selected).map(([n,x])=>[n,x.budget,x.actual,x.deposit,x.status])];download('wedding-budget.csv',a.map(r=>r.map(v=>'"'+String(v??'').replace(/"/g,'""')+'"').join(',')).join('\r\n'),'text/csv')};
+document.getElementById('reset').onclick=()=>{if(confirm('Delete all wedding planner data saved in this browser?')){data=JSON.parse(JSON.stringify(fresh));save()}};
+render();
+})();
+</script></body></html>
