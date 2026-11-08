@@ -375,7 +375,7 @@ function togglePlannerPreview(key){
  if(key==='salary'){
   document.getElementById('plannerPreviewTitle').textContent='Salary Planner';
   document.getElementById('plannerPreviewDescription').textContent='Track income, payroll, deductions, expenses and savings.';
-  panel.querySelector('.planner-preview-empty').innerHTML='<span class="planner-preview-mark">＋</span><b>Salary workspace</b><span>Salary remains a separate planner. Its own income and payroll details are managed independently from life milestones.</span>';
+  panel.querySelector('.planner-preview-empty').innerHTML='<div class="salary-embed-shell"><iframe id="salaryPlannerFrame" title="Salary Planner" src="./salary/index.html" loading="lazy"></iframe></div>';
  }else{
   const name=decodeURIComponent(key.slice(10)),c=milestoneCalculation(name);
   if(!c){closePlannerPreview();return}
@@ -989,4 +989,20 @@ main [data-page].page-hidden{display:none!important}
 .milestone-planner-summary .dialog-action{grid-column:1/-1;width:100%}
 @media(max-width:760px){.planner-section #plannerGrid{height:auto!important;max-height:none!important;min-height:39px!important;grid-auto-rows:74px}.planner-tile{background:#28644c!important;border-color:#c6a45d!important;color:#fff!important}.planner-tile .planner-copy b{color:#fff!important}}
 </style>
-</body></html>
+
+<style id="salary-planner-embed-style">
+#plannerPreview:has(#salaryPlannerFrame){width:100%;max-width:100%;overflow:visible}
+#plannerPreview .planner-preview-inner{width:100%;max-width:100%}
+#plannerPreview .salary-embed-shell{width:100%;min-width:0;margin:12px 0 0;border:1px solid #d7e0ea;border-radius:14px;overflow:hidden;background:#f4f6f8}
+#plannerPreview #salaryPlannerFrame{display:block;width:100%;height:900px;min-height:900px;border:0;background:#f4f6f4}
+@media(max-width:760px){#plannerPreview .salary-embed-shell{margin-left:-4px;width:calc(100% + 8px);border-radius:11px}#plannerPreview #salaryPlannerFrame{height:900px;min-height:900px}}
+</style>
+<script id="salary-planner-embed-bridge">
+window.addEventListener('message',event=>{
+ if(event.origin!==location.origin||event.data?.type!=='lifeTrackerSalaryHeight')return;
+ const frame=document.getElementById('salaryPlannerFrame');
+ const height=Number(event.data.height);
+ if(frame&&Number.isFinite(height))frame.style.height=Math.max(900,Math.min(height+8,12000))+'px';
+});
+</script>
+\n</body></html>
