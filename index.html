@@ -1082,6 +1082,8 @@ main .planner-section #plannerGrid{touch-action:pan-x pan-y!important;-webkit-ov
 main .planner-section #plannerGrid>.planner-tile{touch-action:pan-x pan-y!important;-webkit-tap-highlight-color:transparent;user-select:none;-webkit-user-select:none;cursor:pointer}
 main .planner-section #plannerGrid>.planner-tile:active{filter:brightness(.94)}
 #plannerPreview.planner-preview{transition:opacity .34s ease,transform .46s cubic-bezier(.2,.8,.2,1)!important;will-change:transform,opacity}
+#plannerPreview.planner-preview:not(.is-open){transform:translate3d(0,-22px,0)!important}
+#plannerPreview.planner-preview.is-open{transform:translate3d(0,0,0)!important}
 #plannerPreview.planner-preview.is-open{transition:opacity .34s ease,transform .46s cubic-bezier(.2,.8,.2,1)!important}
 #plannerPreview.planner-preview.is-dragging{transition:none!important;will-change:transform,opacity}
 #plannerPreview .planner-drag-handle{touch-action:none!important;-webkit-user-select:none;user-select:none;cursor:grab}
