@@ -365,7 +365,7 @@ const plannerInfo={salary:{title:'Salary Planner',desc:'Track income, payroll, d
 const plannerIcons={wallet:'<rect x="3" y="6" width="18" height="14" rx="2"/><path d="M3 9h18M16 14h2"/>',rings:'<circle cx="9" cy="13" r="5"/><circle cx="16" cy="13" r="5"/><path d="m9 4 2-2 2 2-2 2z"/>',house:'<path d="m3 10 9-7 9 7v10H3z"/><path d="M9 20v-6h6v6"/>',car:'<path d="m5 11 2-5h10l2 5 2 2v5h-2"/><path d="M5 18H3v-5l2-2h14"/><circle cx="7" cy="18" r="2"/><circle cx="17" cy="18" r="2"/>',plane:'<path d="m3 12 18-8-6 17-3-7-9-2z"/><path d="m12 14 5-5"/>',baby:'<circle cx="12" cy="8" r="5"/><path d="M7 13v3a5 5 0 0 0 10 0v-3M9 20l-2 2m8-2 2 2"/>',footprints:'<ellipse cx="8" cy="7" rx="3" ry="5" transform="rotate(-20 8 7)"/><ellipse cx="17" cy="17" rx="3" ry="5" transform="rotate(-20 17 17)"/><path d="M5 13c-2 2-2 5 1 6 2 1 4-1 4-3M14 4c1-2 4-2 5 0"/>',target:'<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><path d="m12 12 7-7m-4 0h4v4"/>',grip:'<circle cx="8" cy="6" r="1"/><circle cx="8" cy="12" r="1"/><circle cx="8" cy="18" r="1"/><circle cx="16" cy="6" r="1"/><circle cx="16" cy="12" r="1"/><circle cx="16" cy="18" r="1"/>'};
 function iconSvg(name){return '<svg viewBox="0 0 24 24" aria-hidden="true">'+(plannerIcons[name]||plannerIcons.target)+'</svg>'}
 function initPlannerIcons(){document.querySelectorAll('.planner-icon[data-icon]').forEach(el=>el.innerHTML=iconSvg(el.dataset.icon));document.querySelectorAll('.priority-icon').forEach(el=>{const n=el.textContent.trim(),key=n==='💍'?'rings':n==='🍼'?'baby':n==='⌂'?'house':n==='☆'?'target':'target';el.innerHTML=iconSvg(key)})}
-let plannerDragJustFinished=false;function openPlannerFromCard(event,key){if(event.target.closest('.planner-handle')||plannerDragJustFinished)return;togglePlannerPreview(key)}
+function openPlannerFromCard(event,key){if(event.target.closest?.('.planner-handle'))return;togglePlannerPreview(key)}
 function togglePlannerPreview(key){
  const panel=document.getElementById('plannerPreview');if(!panel)return;
  const current=panel.dataset.planner||'';
@@ -395,6 +395,7 @@ function startPlannerDismiss(e){
  if(e.button!==undefined&&e.button!==0)return;
  const panel=document.getElementById('plannerPreview');if(!panel||!panel.classList.contains('is-open'))return;
  plannerDismissStartY=e.clientY;plannerDismissPointer=e.pointerId;panel.classList.add('is-dragging');
+ panel.style.transition='none';panel.style.opacity='1';
  try{e.currentTarget.setPointerCapture(e.pointerId)}catch(_){}
  e.preventDefault();
 }
@@ -402,14 +403,19 @@ let plannerDismissStartY=0,plannerDismissPointer=null;
 function movePlannerDismiss(e){
  if(plannerDismissPointer===null||e.pointerId!==plannerDismissPointer)return;
  const delta=Math.max(0,e.clientY-plannerDismissStartY);
- const panel=document.getElementById('plannerPreview');if(panel)panel.style.transform='translateY('+delta+'px)';
+ const panel=document.getElementById('plannerPreview');
+ if(panel){panel.style.transform='translate3d(0,'+delta+'px,0)';panel.style.opacity=String(Math.max(.12,1-delta/560))}
 }
 function endPlannerDismiss(e){
  if(plannerDismissPointer===null||(e.pointerId!==undefined&&e.pointerId!==plannerDismissPointer))return;
  const panel=document.getElementById('plannerPreview');const delta=panel?Math.max(0,(e.clientY||0)-plannerDismissStartY):0;
  plannerDismissPointer=null;
- if(panel&&delta>85){closePlannerPreview();return}
- if(panel){panel.classList.remove('is-dragging');panel.style.removeProperty('transform')}
+ if(panel&&delta>105){
+  panel.style.transition='transform .28s cubic-bezier(.2,.7,.25,1),opacity .28s ease';
+  panel.style.transform='translate3d(0,100dvh,0)';panel.style.opacity='0';
+  setTimeout(closePlannerPreview,290);return;
+ }
+ if(panel){panel.style.transition='transform .42s cubic-bezier(.2,.75,.25,1),opacity .32s ease';panel.style.transform='translate3d(0,0,0)';panel.style.opacity='1';setTimeout(()=>{if(panel.classList.contains('is-open')){panel.classList.remove('is-dragging');panel.style.removeProperty('transform');panel.style.removeProperty('opacity');panel.style.removeProperty('transition')}},440)}
 }
 function renderMilestonePlanners(d){
  const root=document.getElementById('plannerGrid');if(!root)return;
@@ -1063,6 +1069,16 @@ body.planner-overlay-open{overflow:hidden!important}
 #plannerPreview .planner-preview-empty{border:0!important;background:transparent!important;padding:0!important;margin:0!important;align-items:stretch!important;text-align:left!important}
 @media(max-width:760px){#plannerPreview .planner-preview-inner{padding:calc(env(safe-area-inset-top) + 8px) 0 calc(env(safe-area-inset-bottom) + 12px)!important}#plannerPreview .planner-preview-top{padding:0 12px 7px}#plannerPreview #salaryPlannerFrame{width:100%!important}}
 @media(prefers-reduced-motion:reduce){#plannerPreview.planner-preview{transition:none!important}}
+</style>
+<style id="planner-touch-and-motion-tuning">
+/* Make planner cards respond immediately to a normal tap */
+main .planner-section #plannerGrid>.planner-tile{touch-action:manipulation!important;-webkit-tap-highlight-color:transparent;user-select:none;-webkit-user-select:none}
+main .planner-section #plannerGrid>.planner-tile:active{transform:scale(.985);filter:brightness(.97)}
+#plannerPreview.planner-preview{transition:opacity .48s ease,transform .58s cubic-bezier(.18,.72,.22,1)!important;will-change:transform,opacity}
+#plannerPreview.planner-preview.is-open{transition:opacity .48s ease,transform .58s cubic-bezier(.18,.72,.22,1)!important}
+#plannerPreview.planner-preview.is-dragging{transition:none!important;will-change:transform,opacity}
+#plannerPreview .planner-drag-handle{touch-action:none!important;-webkit-user-select:none;user-select:none}
+@media(prefers-reduced-motion:reduce){#plannerPreview.planner-preview,#plannerPreview.planner-preview.is-open{transition:none!important}}
 </style>
 <style id="planner-final-phone-fit">
 #plannerPreview .planner-preview-close{display:none!important}
