@@ -1002,7 +1002,7 @@ window.addEventListener('message',event=>{
  if(event.origin!==location.origin||event.data?.type!=='lifeTrackerSalaryHeight')return;
  const frame=document.getElementById('salaryPlannerFrame');
  const height=Number(event.data.height);
- if(frame&&Number.isFinite(height))frame.style.height=Math.max(900,Math.min(height+8,12000))+'px';
+ if(frame&&Number.isFinite(height)){const next=Math.max(900,Math.min(height,12000));const current=parseFloat(frame.style.height)||900;if(Math.abs(next-current)>2)frame.style.height=next+'px';}
 });
 </script>
 \n</body></html>
