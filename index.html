@@ -1177,4 +1177,78 @@ body.planner-overlay-open #plannerPreview{z-index:2147483000!important}
  .milestone-priority .priority-item{min-height:0!important;row-gap:3px!important;padding-top:10px!important;padding-bottom:9px!important}
 }
 </style>
+
+<style id="compact-milestone-swipe-delete">
+/* Compact funding-sequence cards. Delete stays tucked away until a right swipe. */
+.milestone-priority .priority-list{gap:7px!important;padding:2px 3px 4px 1px!important}
+.milestone-priority .priority-item{
+  min-height:0!important;
+  grid-template-columns:22px 17px minmax(0,1fr) auto!important;
+  grid-template-rows:auto auto 5px!important;
+  column-gap:7px!important;row-gap:2px!important;
+  padding:8px 10px!important;padding-right:10px!important;
+  overflow:hidden!important;touch-action:pan-y!important;
+}
+.milestone-priority .priority-item .priority-icon{display:none!important}
+.milestone-priority .priority-rank{grid-column:1!important;grid-row:1/3!important}
+.milestone-priority .priority-handle{grid-column:2!important;grid-row:1/3!important;font-size:14px!important}
+.milestone-priority .priority-open{grid-column:3!important;grid-row:1!important;min-width:0!important;text-align:left!important}
+.milestone-priority .priority-copy b,.milestone-priority .priority-open b{font-size:12px!important;line-height:1.2!important}
+.milestone-priority .priority-open span{display:block!important;font-size:9px!important;line-height:1.2!important;margin-top:2px!important}
+.milestone-priority .priority-calc{grid-column:3!important;grid-row:2!important;font-size:8px!important;padding:0!important}
+.milestone-priority .priority-date{grid-column:4!important;grid-row:1/3!important;font-size:10px!important;white-space:nowrap!important;padding:0!important}
+.milestone-priority .priority-date small{font-size:8px!important;margin-top:1px!important}
+.milestone-priority .priority-progress{grid-column:3/4!important;grid-row:3!important;height:5px!important;margin:2px 0 0!important}
+.milestone-priority .priority-percent{grid-column:4!important;grid-row:3!important;font-size:8px!important;margin:0!important}
+.milestone-priority .priority-remove{
+  position:absolute!important;z-index:2!important;top:0!important;right:0!important;
+  transform:translateX(105%)!important;width:54px!important;height:100%!important;
+  border:0!important;border-radius:0 10px 10px 0!important;
+  background:#b94747!important;color:#fff!important;
+  display:flex!important;align-items:center!important;justify-content:center!important;
+  font:600 10px 'DM Sans',sans-serif!important;opacity:0!important;
+  pointer-events:none!important;transition:transform .2s ease,opacity .2s ease!important;
+}
+.milestone-priority .priority-item.delete-revealed .priority-remove{
+  transform:translateX(0)!important;opacity:1!important;pointer-events:auto!important
+}
+.milestone-priority .priority-item.delete-revealed{padding-right:58px!important}
+@media(max-width:760px){
+ .milestone-priority .priority-list{gap:7px!important}
+ .milestone-priority .priority-item{padding:8px 9px!important;row-gap:2px!important}
+}
+</style>
+<script id="milestone-swipe-right-to-delete">
+(()=>{
+ const root=document.getElementById('priorityList');
+ if(!root||root.dataset.swipeDeleteReady)return;
+ root.dataset.swipeDeleteReady='1';
+ let start=null;
+ root.addEventListener('touchstart',event=>{
+   const item=event.target.closest('.priority-item');
+   if(!item||event.target.closest('.priority-handle,.priority-remove,.priority-calc')){start=null;return}
+   const t=event.changedTouches[0];
+   start={item,x:t.clientX,y:t.clientY};
+ },{passive:true});
+ root.addEventListener('touchend',event=>{
+   if(!start)return;
+   const t=event.changedTouches[0],dx=t.clientX-start.x,dy=t.clientY-start.y;
+   if(Math.abs(dx)>Math.abs(dy)&&dx>48){
+     root.querySelectorAll('.priority-item.delete-revealed').forEach(el=>{if(el!==start.item)el.classList.remove('delete-revealed')});
+     start.item.classList.add('delete-revealed');
+   }else if(Math.abs(dx)>Math.abs(dy)&&dx< -35){
+     start.item.classList.remove('delete-revealed');
+   }
+   start=null;
+ },{passive:true});
+ root.addEventListener('click',event=>{
+   const item=event.target.closest('.priority-item');
+   if(!item)return;
+   if(event.target.closest('.priority-remove'))return;
+   if(!event.target.closest('.priority-open,.priority-calc'))return;
+   root.querySelectorAll('.priority-item.delete-revealed').forEach(el=>el.classList.remove('delete-revealed'));
+ });
+})();
+</script>
+
 </body></html>
