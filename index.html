@@ -148,7 +148,7 @@ main .planner-section #plannerGrid>.planner-tile .planner-copy b{color:inherit!i
  </div>
  <div id="plannerPreview" class="planner-preview" aria-live="polite" aria-hidden="true">
   <div class="planner-preview-inner">
-   <div class="planner-preview-top"><span class="section-kicker">PLANNER WORKSPACE</span><button type="button" class="planner-preview-close" onclick="closePlannerPreview()" aria-label="Close planner preview">×</button></div>
+   <div class="planner-preview-top"><div id="plannerDragHandle" class="planner-drag-handle" role="button" tabindex="0" aria-label="Swipe down to close planner" onpointerdown="startPlannerDismiss(event)" onpointermove="movePlannerDismiss(event)" onpointerup="endPlannerDismiss(event)" onpointercancel="endPlannerDismiss(event)" onclick="if(event.detail===0)closePlannerPreview()"><span></span></div><button type="button" class="planner-preview-close" onclick="closePlannerPreview()" aria-label="Close planner preview">×</button></div>
    <h3 id="plannerPreviewTitle"></h3>
    <p id="plannerPreviewDescription"></p>
    <div class="planner-preview-empty"><span class="planner-preview-mark">＋</span><b>Workspace ready for integration</b><span>This is a preview only. Planner features and data will appear here when the separate planner is connected.</span></div>
@@ -388,8 +388,28 @@ function togglePlannerPreview(key){
 }
 function closePlannerPreview(){
  const panel=document.getElementById('plannerPreview');if(!panel)return;
- panel.classList.remove('is-open','is-salary');panel.setAttribute('aria-hidden','true');document.body.classList.remove('planner-overlay-open');
+ panel.classList.remove('is-open','is-salary','is-dragging');panel.style.removeProperty('transform');panel.style.removeProperty('transition');panel.setAttribute('aria-hidden','true');document.body.classList.remove('planner-overlay-open');
  document.querySelectorAll('#plannerGrid .planner-tile').forEach(tile=>{tile.classList.remove('is-selected');tile.setAttribute('aria-expanded','false')});
+}
+function startPlannerDismiss(e){
+ if(e.button!==undefined&&e.button!==0)return;
+ const panel=document.getElementById('plannerPreview');if(!panel||!panel.classList.contains('is-open'))return;
+ plannerDismissStartY=e.clientY;plannerDismissPointer=e.pointerId;panel.classList.add('is-dragging');
+ try{e.currentTarget.setPointerCapture(e.pointerId)}catch(_){}
+ e.preventDefault();
+}
+let plannerDismissStartY=0,plannerDismissPointer=null;
+function movePlannerDismiss(e){
+ if(plannerDismissPointer===null||e.pointerId!==plannerDismissPointer)return;
+ const delta=Math.max(0,e.clientY-plannerDismissStartY);
+ const panel=document.getElementById('plannerPreview');if(panel)panel.style.transform='translateY('+delta+'px)';
+}
+function endPlannerDismiss(e){
+ if(plannerDismissPointer===null||(e.pointerId!==undefined&&e.pointerId!==plannerDismissPointer))return;
+ const panel=document.getElementById('plannerPreview');const delta=panel?Math.max(0,(e.clientY||0)-plannerDismissStartY):0;
+ plannerDismissPointer=null;
+ if(panel&&delta>85){closePlannerPreview();return}
+ if(panel){panel.classList.remove('is-dragging');panel.style.removeProperty('transform')}
 }
 function renderMilestonePlanners(d){
  const root=document.getElementById('plannerGrid');if(!root)return;
@@ -1012,6 +1032,22 @@ window.addEventListener('message',event=>{
 .priority-remove:active{background:#fbeaea}
 </style>
 
+<style id="planner-notification-sheet">
+body.planner-overlay-open .milestone-priority,
+body.planner-overlay-open .timeline-only-card{display:none!important}
+#plannerPreview .planner-preview-top{position:sticky!important;top:0!important;min-height:42px!important;justify-content:center!important;padding:0 12px 8px!important}
+#plannerPreview .planner-drag-handle{position:absolute;left:50%;top:calc(env(safe-area-inset-top) + 2px);transform:translateX(-50%);width:100px;height:28px;display:flex;align-items:center;justify-content:center;cursor:grab;touch-action:none;z-index:8}
+#plannerPreview .planner-drag-handle span{display:block;width:42px;height:5px;border-radius:99px;background:#9aa9bb;box-shadow:0 1px 2px #10274420}
+#plannerPreview .planner-preview-close{position:absolute!important;right:12px!important;top:calc(env(safe-area-inset-top) + 1px)!important}
+#plannerPreview.planner-preview.is-dragging{transition:none!important}
+#plannerPreview.planner-preview.is-open:not(.is-dragging){transition:opacity .2s ease,transform .25s ease!important}
+@media(max-width:760px){
+ #plannerPreview .planner-preview-inner{padding-top:calc(env(safe-area-inset-top) + 38px)!important}
+ #plannerPreview .planner-preview-top{height:34px!important;min-height:34px!important;padding:0!important}
+ #plannerPreview .planner-drag-handle{top:calc(env(safe-area-inset-top) + 1px);height:30px}
+ #plannerPreview .planner-preview-close{right:10px!important;top:calc(env(safe-area-inset-top) + 0px)!important}
+}
+</style>
 <style id="planner-maximized-overlay">
 body.planner-overlay-open{overflow:hidden!important}
 #plannerPreview.planner-preview{display:block!important;position:fixed!important;inset:0!important;z-index:100000!important;width:100vw!important;height:100dvh!important;max-width:none!important;max-height:100dvh!important;margin:0!important;padding:0!important;overflow-y:auto!important;overflow-x:hidden!important;overscroll-behavior:contain!important;background:#f6f8fb!important;opacity:0;transform:translateY(8px);pointer-events:none;transition:opacity .2s ease,transform .25s ease}
