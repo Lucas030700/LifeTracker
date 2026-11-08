@@ -257,8 +257,8 @@ function openPlannerManager(){const dlg=document.getElementById('plannerDialog')
 function showReorderHelp(){const dlg=document.getElementById('plannerDialog');document.getElementById('plannerDialogBody').innerHTML='<div class="section-kicker">FUNDING SEQUENCE</div><h3>Reorder milestones</h3><p>Press and hold the six-dot handle beside a milestone, then drag it to a new position. The funding model recalculates projected dates based on the new priority.</p><span class="dialog-status">Drag and drop enabled</span><button class="dialog-action" type="button" onclick="closePlannerDialog()">Done</button>';dlg.showModal()}
 function closePlannerDialog(){document.getElementById('plannerDialog').close()}
 function bindPlannerDrag(){
- const root=document.getElementById('plannerGrid');if(!root||root.dataset.dragBound)return;root.dataset.dragBound='1';let state=null;
- root.querySelectorAll('.planner-handle').forEach(handle=>handle.addEventListener('pointerdown',e=>{
+ const root=document.getElementById('plannerGrid');if(!root)return;let state=null;
+ root.querySelectorAll('.planner-handle').forEach(handle=>{if(handle.dataset.dragBound)return;handle.dataset.dragBound='1';handle.addEventListener('pointerdown',e=>{
   if((e.button!==undefined&&e.button!==0)||state)return;e.preventDefault();
   const item=handle.closest('.planner-tile'),rect=item.getBoundingClientRect(),placeholder=document.createElement('div');
   placeholder.className='planner-placeholder';placeholder.style.height=rect.height+'px';placeholder.style.width=rect.width+'px';
@@ -278,7 +278,7 @@ function bindPlannerDrag(){
   const onUp=e=>{if(state&&e.pointerId===state.pointerId){moveTo(e.clientX,e.clientY);cleanup(true)}};
   const onCancel=e=>{if(state&&e.pointerId===state.pointerId)cleanup(false)};
   window.addEventListener('pointermove',onMove,{passive:false});window.addEventListener('pointerup',onUp);window.addEventListener('pointercancel',onCancel);
- }));
+ });});
 }
 function setPreset(n){document.getElementById('cashSplit').value=n;document.querySelectorAll('.split button').forEach(b=>b.classList.remove('selected'));document.getElementById('btn-'+(n===50?'balanced':n===25?'farm':'cash')).classList.add('selected');draw()}
 function toggleEdit(){edit=!edit;document.getElementById('editBtn').textContent=edit?'DONE ✓':'EDIT GOALS +';draw()}
