@@ -105,15 +105,15 @@ main{padding-top:34px}
 <body><div class="shell"><aside class="sidebar"><div class="brand"><div class="mark">↗</div>lifeplan</div><div class="navlabel">YOUR PLAN</div><nav class="nav"><a class="active" href="#"><span class="ico">◫</span>Overview</a><a href="#events"><span class="ico">◷</span>Life milestones</a><a href="#strategy"><span class="ico">⌁</span>Money strategy</a><a href="#farm"><span class="ico">♧</span>Farm & assets</a></nav><div class="side-note"><b>A plan that grows with you</b>Explore what feels possible. Every number is yours to adjust.</div><div class="profile"><div class="avatar">M</div><div><b>My plan</b><br><small>Personal workspace</small></div></div></aside>
 <main id="top"><section class="page-hero" data-page="overview"><div class="page-hero-mark">✦</div><div><div class="page-hero-kicker">YOUR LIFE, YOUR PLAN</div><h1 class="hello">Life Planner</h1><p class="sub">Your future, in view. Plan your goals, money, and milestones in one place.</p></div><span class="page-hero-orbit" aria-hidden="true"></span></section>
 <div class="metricrow home-metrics" data-page="overview" aria-live="polite"><button class="metric metric-button usable-metric" type="button" id="usableCard" aria-expanded="false" onclick="toggleHomeDetail('usable')"><label>Usable assets</label><strong id="usableTotal">₱—</strong><span>Available for your milestones · View details</span></button><button class="metric metric-button" type="button" id="reserveCard" aria-expanded="false" onclick="toggleHomeDetail('reserve')"><label>Emergency fund</label><strong id="homeReserve">Not set</strong><span>Your protected target · View details</span></button><button class="metric metric-button" type="button" id="worthCard" aria-expanded="false" onclick="toggleHomeDetail('worth')"><label>Net worth</label><strong id="netWorth">₱—</strong><span>After recorded loans · View details</span></button></div><section class="planner-section" data-page="overview">
- 
+ <div class="planner-ribbon-label"><span class="section-kicker">YOUR PLANNERS</span><button class="planner-add" type="button" onclick="addPlanner()">＋ ADD</button></div>
  <div id="plannerBlock">
  <div class="planner-grid" id="plannerGrid">
-  <button class="planner-tile" type="button" data-planner="salary" onclick="openPlannerFromCard(event,'salary')"><span class="planner-copy"><b>Salary</b></span></button>
-  <button class="planner-tile" type="button" data-planner="wedding" onclick="openPlannerFromCard(event,'wedding')"><span class="planner-copy"><b>Wedding</b></span></button>
-  <button class="planner-tile" type="button" data-planner="house" onclick="openPlannerFromCard(event,'house')"><span class="planner-copy"><b>House</b></span></button>
-  <button class="planner-tile" type="button" data-planner="car" onclick="openPlannerFromCard(event,'car')"><span class="planner-copy"><b>Car</b></span></button>
-  <button class="planner-tile" type="button" data-planner="travel" onclick="openPlannerFromCard(event,'travel')"><span class="planner-copy"><b>Travel</b></span></button>
-  <button class="planner-tile" type="button" data-planner="child" onclick="openPlannerFromCard(event,'child')"><span class="planner-copy"><b>Child</b></span></button>
+  <button class="planner-tile" type="button" data-planner="salary" onclick="openPlannerFromCard(event,'salary')"><span class="planner-icon" aria-hidden="true">▤</span><span class="planner-copy"><b>Salary</b></span></button>
+  <button class="planner-tile" type="button" data-planner="wedding" onclick="openPlannerFromCard(event,'wedding')"><span class="planner-icon" aria-hidden="true">♧</span><span class="planner-copy"><b>Wedding</b></span></button>
+  <button class="planner-tile" type="button" data-planner="house" onclick="openPlannerFromCard(event,'house')"><span class="planner-icon" aria-hidden="true">⌂</span><span class="planner-copy"><b>House</b></span></button>
+  <button class="planner-tile" type="button" data-planner="car" onclick="openPlannerFromCard(event,'car')"><span class="planner-icon" aria-hidden="true">▰</span><span class="planner-copy"><b>Car</b></span></button>
+  <button class="planner-tile" type="button" data-planner="travel" onclick="openPlannerFromCard(event,'travel')"><span class="planner-icon" aria-hidden="true">➤</span><span class="planner-copy"><b>Travel</b></span></button>
+  <button class="planner-tile" type="button" data-planner="child" onclick="openPlannerFromCard(event,'child')"><span class="planner-icon" aria-hidden="true">♙</span><span class="planner-copy"><b>Child</b></span></button>
  
   <button class="planner-tile planner-add-end" type="button" onclick="addPlanner()"><span class="planner-copy"><b>＋ Add planner</b></span></button>
  </div>
@@ -597,5 +597,24 @@ main .planner-section #plannerGrid>.planner-add-end{border-style:dashed!importan
 main .milestone-priority[data-page="overview"]{margin:16px 0 18px!important;clear:both!important;position:relative!important}
 main .timeline-only-card[data-page="overview"]{display:block!important;position:relative!important;margin:14px 0 18px!important;padding:12px 12px 8px!important;overflow:hidden!important}
 main .timeline-only-card .timeline-wrap{margin:0!important;padding:12px 3px 10px!important}
+</style>
+<style id="lifeplanner-polish-final">
+/* Short, designed planner ribbon */
+main .planner-section[data-page="overview"]{display:block!important;position:relative!important;clear:both!important;width:100%!important;height:auto!important;min-height:0!important;margin:3px 0 7px!important;padding:0!important;overflow:visible!important}
+main .planner-section .planner-ribbon-label{display:flex!important;align-items:center!important;justify-content:space-between!important;height:22px!important;min-height:22px!important;margin:0 2px 5px!important;padding:0!important}
+main .planner-section .planner-ribbon-label .section-kicker{font-size:9px!important;letter-spacing:1.35px!important;font-weight:800!important;color:#62796c!important}
+main .planner-section .planner-add{display:inline-flex!important;align-items:center!important;justify-content:center!important;height:23px!important;min-height:23px!important;padding:0 10px!important;border:1px solid #d5e3d7!important;border-radius:99px!important;background:#edf5ed!important;color:#315f49!important;font-size:9px!important;font-weight:750!important}
+main .planner-section #plannerBlock{display:block!important;height:auto!important;min-height:0!important;margin:0!important;padding:0!important;overflow:visible!important}
+main .planner-section #plannerGrid,main .planner-section #plannerGrid.is-dragging{display:flex!important;flex-flow:row nowrap!important;align-items:stretch!important;gap:8px!important;width:100%!important;height:57px!important;min-height:57px!important;max-height:57px!important;margin:0!important;padding:1px 0 3px!important;overflow-x:auto!important;overflow-y:hidden!important;scroll-snap-type:x mandatory!important;scroll-snap-stop:always!important;scroll-padding-inline:0!important;-webkit-overflow-scrolling:touch!important;overscroll-behavior-x:contain!important;touch-action:pan-x!important;scrollbar-width:none!important}
+main .planner-section #plannerGrid::-webkit-scrollbar{display:none!important}
+main .planner-section #plannerGrid>.planner-tile{box-sizing:border-box!important;position:relative!important;inset:auto!important;display:flex!important;flex:0 0 calc((100% - 16px)/3)!important;width:calc((100% - 16px)/3)!important;min-width:calc((100% - 16px)/3)!important;max-width:calc((100% - 16px)/3)!important;height:52px!important;min-height:52px!important;max-height:52px!important;align-items:center!important;justify-content:flex-start!important;gap:7px!important;margin:0!important;padding:6px 8px!important;border:1px solid #d9e5da!important;border-radius:12px!important;background:linear-gradient(145deg,#ffffff 0%,#f2f7f1 100%)!important;box-shadow:0 2px 8px #244a320c!important;scroll-snap-align:start!important;scroll-snap-stop:always!important;overflow:hidden!important}
+main .planner-section #plannerGrid>.planner-tile .planner-icon{display:flex!important;flex:0 0 27px!important;align-items:center!important;justify-content:center!important;width:27px!important;height:27px!important;border-radius:9px!important;background:#e7f1e8!important;color:#315f49!important;font-size:17px!important;line-height:1!important}
+main .planner-section #plannerGrid>.planner-tile .planner-copy{display:block!important;min-width:0!important;flex:1 1 auto!important;overflow:hidden!important}
+main .planner-section #plannerGrid>.planner-tile .planner-copy b{display:block!important;margin:0!important;color:#263b30!important;font-size:11px!important;font-weight:750!important;line-height:1.2!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important}
+main .planner-section #plannerGrid>.planner-tile .planner-copy small{display:none!important}
+main .planner-section #plannerGrid>.planner-tile:active{transform:scale(.97)!important;background:#eaf3eb!important}
+main .planner-section #plannerGrid>.planner-add-end{display:none!important}
+main .milestone-priority[data-page="overview"]{clear:both!important;margin:5px 0 10px!important;position:relative!important}
+@media(max-width:760px){main{row-gap:7px!important}main .planner-section[data-page="overview"]{margin:1px 0 4px!important}main .milestone-priority[data-page="overview"]{margin-top:3px!important}}
 </style>
 </body></html>
