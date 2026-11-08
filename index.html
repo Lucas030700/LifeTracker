@@ -144,6 +144,15 @@ main .planner-section #plannerGrid>.planner-tile .planner-copy b{color:inherit!i
   <button class="planner-tile" type="button" data-planner="child" onclick="openPlannerFromCard(event,'child')"><span class="planner-copy"><b>Child</b></span></button>
  
   </div>
+  <div class="planner-scroll-cue" aria-hidden="true"><span class="planner-scroll-track"><i></i></span><span>Swipe to explore</span><b>→</b></div>
+ </div>
+ <div id="plannerPreview" class="planner-preview" aria-live="polite" aria-hidden="true">
+  <div class="planner-preview-inner">
+   <div class="planner-preview-top"><span class="section-kicker">PLANNER WORKSPACE</span><button type="button" class="planner-preview-close" onclick="closePlannerPreview()" aria-label="Close planner preview">×</button></div>
+   <h3 id="plannerPreviewTitle"></h3>
+   <p id="plannerPreviewDescription"></p>
+   <div class="planner-preview-empty"><span class="planner-preview-mark">＋</span><b>Workspace ready for integration</b><span>This is a preview only. Planner features and data will appear here when the separate planner is connected.</span></div>
+  </div>
  </div>
 </section>
 <div class="breakdown home-detail" data-page="overview" id="homeDetail" hidden></div>
@@ -356,7 +365,21 @@ const plannerInfo={salary:{title:'Salary Planner',desc:'Track income, payroll, d
 const plannerIcons={wallet:'<rect x="3" y="6" width="18" height="14" rx="2"/><path d="M3 9h18M16 14h2"/>',rings:'<circle cx="9" cy="13" r="5"/><circle cx="16" cy="13" r="5"/><path d="m9 4 2-2 2 2-2 2z"/>',house:'<path d="m3 10 9-7 9 7v10H3z"/><path d="M9 20v-6h6v6"/>',car:'<path d="m5 11 2-5h10l2 5 2 2v5h-2"/><path d="M5 18H3v-5l2-2h14"/><circle cx="7" cy="18" r="2"/><circle cx="17" cy="18" r="2"/>',plane:'<path d="m3 12 18-8-6 17-3-7-9-2z"/><path d="m12 14 5-5"/>',baby:'<circle cx="12" cy="8" r="5"/><path d="M7 13v3a5 5 0 0 0 10 0v-3M9 20l-2 2m8-2 2 2"/>',footprints:'<ellipse cx="8" cy="7" rx="3" ry="5" transform="rotate(-20 8 7)"/><ellipse cx="17" cy="17" rx="3" ry="5" transform="rotate(-20 17 17)"/><path d="M5 13c-2 2-2 5 1 6 2 1 4-1 4-3M14 4c1-2 4-2 5 0"/>',target:'<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><path d="m12 12 7-7m-4 0h4v4"/>',grip:'<circle cx="8" cy="6" r="1"/><circle cx="8" cy="12" r="1"/><circle cx="8" cy="18" r="1"/><circle cx="16" cy="6" r="1"/><circle cx="16" cy="12" r="1"/><circle cx="16" cy="18" r="1"/>'};
 function iconSvg(name){return '<svg viewBox="0 0 24 24" aria-hidden="true">'+(plannerIcons[name]||plannerIcons.target)+'</svg>'}
 function initPlannerIcons(){document.querySelectorAll('.planner-icon[data-icon]').forEach(el=>el.innerHTML=iconSvg(el.dataset.icon));document.querySelectorAll('.priority-icon').forEach(el=>{const n=el.textContent.trim(),key=n==='💍'?'rings':n==='🍼'?'baby':n==='⌂'?'house':n==='☆'?'target':'target';el.innerHTML=iconSvg(key)})}
-let plannerDragJustFinished=false;function openPlannerFromCard(event,key){if(event.target.closest('.planner-handle')||plannerDragJustFinished)return;openPlanner(key)}
+let plannerDragJustFinished=false;function openPlannerFromCard(event,key){if(event.target.closest('.planner-handle')||plannerDragJustFinished)return;togglePlannerPreview(key)}
+function togglePlannerPreview(key){
+ const info=plannerInfo[key],panel=document.getElementById('plannerPreview');if(!info||!panel)return;
+ const current=panel.dataset.planner||'';
+ if(current===key&&panel.classList.contains('is-open')){closePlannerPreview();return}
+ document.querySelectorAll('#plannerGrid .planner-tile').forEach(tile=>{const active=tile.dataset.planner===key;tile.classList.toggle('is-selected',active);tile.setAttribute('aria-expanded',String(active))});
+ document.getElementById('plannerPreviewTitle').textContent=info.title;
+ document.getElementById('plannerPreviewDescription').textContent=info.desc;
+ panel.dataset.planner=key;panel.setAttribute('aria-hidden','false');panel.classList.add('is-open');
+}
+function closePlannerPreview(){
+ const panel=document.getElementById('plannerPreview');if(!panel)return;
+ panel.classList.remove('is-open');panel.setAttribute('aria-hidden','true');
+ document.querySelectorAll('#plannerGrid .planner-tile').forEach(tile=>{tile.classList.remove('is-selected');tile.setAttribute('aria-expanded','false')});
+}
 function renderCustomPlanners(){const root=document.getElementById('plannerGrid');if(!root)return;root.querySelectorAll('[data-custom-planner="true"]').forEach(x=>x.remove());customPlanners.forEach(p=>{if(root.querySelector('[data-planner="'+p.key+'"]'))return;const b=document.createElement('button');b.type='button';b.className='planner-tile';b.dataset.planner=p.key;b.dataset.customPlanner='true';b.innerHTML='<span class="planner-icon">'+iconSvg('target')+'</span><span class="planner-copy"><b></b><small>Custom planner</small></span><span class="planner-arrow">›</span>';b.querySelector('b').textContent=p.name;b.addEventListener('click',e=>openPlannerFromCard(e,p.key));root.appendChild(b)});bindPlannerDrag()}
 function addPlanner(){const name=prompt('What planner would you like to add?');if(!name||!name.trim())return;const clean=name.trim().slice(0,32),key='custom-'+Date.now();customPlanners.push({key,name:clean});plannerInfo[key]={title:clean+' Planner',desc:'Your custom planning workspace.'};renderCustomPlanners();localStorage.setItem('lifeplan-v1',JSON.stringify(collectLifePlanData()));if(cloudReady)scheduleCloudSync()}
 function togglePlannerBlock(){const panel=document.getElementById("plannerBlock"),btn=document.querySelector(".planner-section .block-toggle"),open=panel.hidden;panel.hidden=!open;btn.setAttribute("aria-expanded",String(open));if(open){renderCustomPlanners();bindPlannerDrag()}}
@@ -883,5 +906,29 @@ main .planner-section #plannerGrid>.planner-tile:active{filter:brightness(1.08)}
     box-sizing:border-box!important;
   }
 }
+</style>
+
+<style id="planner-inline-expansion-and-scroll-cue">
+/* Horizontal scroll hint */
+main .planner-section .planner-scroll-cue{display:flex;align-items:center;justify-content:flex-end;gap:6px;margin:3px 3px 0;color:#718277;font:600 9px 'DM Sans',sans-serif;letter-spacing:.15px}
+main .planner-section .planner-scroll-track{display:block;position:relative;width:34px;height:3px;border-radius:8px;background:#dce7de;overflow:hidden}
+main .planner-section .planner-scroll-track i{display:block;width:42%;height:100%;border-radius:8px;background:#bd9b57;animation:plannerSwipeHint 1.8s ease-in-out infinite alternate}
+main .planner-section .planner-scroll-cue b{font-size:13px;color:#bd9b57;animation:plannerArrowHint 1.2s ease-in-out infinite alternate}
+@keyframes plannerSwipeHint{from{transform:translateX(0)}to{transform:translateX(140%)}}
+@keyframes plannerArrowHint{from{transform:translateX(0)}to{transform:translateX(3px)}}
+/* Inline workspace unfolds below all planner tiles and pushes following content down */
+main .planner-section .planner-preview{display:grid;grid-template-rows:0fr;opacity:0;transform:translateY(-5px);transition:grid-template-rows .42s cubic-bezier(.2,.75,.25,1),opacity .25s ease,transform .35s ease;margin-top:0}
+main .planner-section .planner-preview-inner{min-height:0;overflow:hidden}
+main .planner-section .planner-preview.is-open,
+main .planner-section .planner-preview.is-open{grid-template-rows:1fr;opacity:1;transform:translateY(0);margin-top:12px}
+main .planner-section .planner-preview-top{display:flex;align-items:center;justify-content:space-between}
+main .planner-section .planner-preview-close{border:0;background:#edf3ed;color:#315b45;border-radius:50%;width:27px;height:27px;font-size:18px;line-height:1;cursor:pointer}
+main .planner-section .planner-preview h3{font:700 17px Manrope,sans-serif;color:#244b38;margin:8px 0 3px}
+main .planner-section .planner-preview p{font-size:11px;color:#718078;margin:0 0 11px}
+main .planner-section .planner-preview-empty{display:flex;flex-direction:column;align-items:center;text-align:center;gap:5px;padding:17px 12px;border:1px dashed #c6d8ca;border-radius:12px;background:#f5f8f3;color:#748078;font-size:10px;line-height:1.45}
+main .planner-section .planner-preview-mark{display:grid;place-items:center;width:29px;height:29px;border-radius:50%;background:#e4eee5;color:#37674c;font-size:20px}
+main .planner-section .planner-preview-empty b{font-size:11px;color:#345943}
+main .planner-section #plannerGrid>.planner-tile.is-selected{outline:2px solid #c4a15a;outline-offset:1px;filter:brightness(1.08)}
+@media(prefers-reduced-motion:reduce){main .planner-section .planner-scroll-track i,main .planner-section .planner-scroll-cue b{animation:none}main .planner-section .planner-preview{transition:none}}
 </style>
 </body></html>
