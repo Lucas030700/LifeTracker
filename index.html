@@ -200,6 +200,40 @@ main{padding-top:34px}
 }
 </style>
 
+<style>
+/* Final iPhone-width planner ribbon: three compact equal cards per view */
+@media(max-width:760px){
+ .planner-section{width:100%;min-width:0;overflow:hidden!important}
+ .planner-section #plannerBlock{width:100%;min-width:0}
+ .planner-section .planner-grid,.planner-section .planner-grid.is-dragging{
+  display:flex!important;flex-flow:row nowrap!important;align-items:stretch!important;
+  gap:7px!important;width:100%!important;height:54px!important;max-height:54px!important;
+  padding:2px 1px 4px!important;margin:0!important;overflow-x:auto!important;overflow-y:hidden!important;
+  scroll-snap-type:x mandatory!important;scroll-behavior:smooth;-webkit-overflow-scrolling:touch;
+  overscroll-behavior-x:contain;touch-action:pan-x!important;scrollbar-width:none
+ }
+ .planner-section .planner-grid::-webkit-scrollbar{display:none}
+ .planner-section .planner-tile{
+  display:grid!important;grid-template-columns:12px 21px minmax(0,1fr) 7px!important;
+  flex:0 0 calc((100% - 14px)/3)!important;width:calc((100% - 14px)/3)!important;
+  min-width:0!important;min-height:48px!important;height:48px!important;
+  padding:4px 5px!important;gap:4px!important;overflow:hidden!important;
+  border:1px solid #dce7dd!important;border-radius:10px!important;
+  scroll-snap-align:start!important;scroll-snap-stop:always!important;
+  background:#fbfdfb!important;box-shadow:0 2px 7px #244a3210!important
+ }
+ .planner-section .planner-handle{display:grid!important;place-items:center;width:12px!important;height:22px!important;font-size:10px!important;touch-action:none!important}
+ .planner-section .planner-icon{width:21px!important;height:21px!important;border-radius:7px!important;font-size:12px!important}
+ .planner-section .planner-icon svg{width:15px!important;height:15px!important}
+ .planner-section .planner-copy{min-width:0!important;overflow:hidden!important}
+ .planner-section .planner-copy b{display:block;font-size:9px!important;line-height:1.1!important;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+ .planner-section .planner-copy small{display:block;font-size:7px!important;line-height:1.1!important;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+ .planner-section .planner-arrow{font-size:12px!important}
+ .planner-section .planner-add-tile{grid-template-columns:21px minmax(0,1fr)!important;justify-content:center!important}
+ .planner-section .planner-add-tile .planner-icon{display:grid;place-items:center;border:1px dashed #9db9a3!important;background:#f5f8f5!important}
+}
+</style>
+
 
 <div id="authGate" style="position:fixed;inset:0;z-index:20000;background:#17251fcc;display:flex;align-items:center;justify-content:center;padding:18px"><div style="width:min(100%,430px);background:#fff;border-radius:18px;padding:25px;box-shadow:0 22px 70px #0004"><div style="font-size:11px;letter-spacing:1px;color:#28644c;font-weight:800">LIFEPLAN ACCOUNT</div><h2 id="authTitle" style="margin:8px 0 5px;font:700 24px Manrope,sans-serif">Welcome back</h2><p id="authHint" style="margin:0 0 18px;color:#78827d;font-size:13px">Sign in to access your LifePlan on any device.</p><form id="authForm"><div class="field"><label for="authEmail">Email</label><input id="authEmail" type="email" required autocomplete="email" style="width:100%;padding:12px;border:1px solid #dce4dc;border-radius:9px"></div><div class="field"><label for="authPassword">Password</label><input id="authPassword" type="password" required minlength="6" autocomplete="current-password" style="width:100%;padding:12px;border:1px solid #dce4dc;border-radius:9px"></div><button id="authSubmit" type="submit" style="width:100%;padding:12px;background:#245e46;color:white;border:0;border-radius:9px;font-weight:700">Sign in</button></form><div id="authError" role="alert" style="font-size:12px;color:#b33b3b;margin-top:12px"></div><div style="font-size:12px;text-align:center;margin-top:16px;color:#78827d"><span id="authSwitchText">Don't have an account?</span> <button id="authSwitch" type="button" style="border:0;background:none;color:#245e46;padding:0;font-weight:700">Create account</button></div></div></div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
