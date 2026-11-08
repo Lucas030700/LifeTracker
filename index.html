@@ -428,7 +428,7 @@ function removeCropRecord(id){const r=farmHistory.find(x=>x.id===id);if(!r||!win
 function updateAsset(id,key,value){let a=assets.find(x=>x.id===id);if(!a)return;a[key]=Math.max(0,Number(value)||0);draw()}
 function recordSale(id){let a=assets.find(x=>x.id===id&&!x.sold);if(!a)return;let proceeds=Math.max(0,Number(a.value)-Number(a.debt));document.getElementById('savings').value=val('savings')+proceeds;a.sold=true;a.saleAmount=proceeds;draw()}
 function removeAsset(id){let a=assets.find(x=>x.id===id);if(!a)return;if(!window.confirm(`Remove “${a.name}” from your asset list? This also removes it from your totals.`))return;assets=assets.filter(x=>x.id!==id);draw()}
-function selectPage(page){activePage=page;const mobile=window.matchMedia('(max-width: 760px)').matches;document.body.classList.toggle('is-mobile',mobile);document.querySelectorAll('main [data-page]').forEach(el=>el.classList.toggle('page-hidden',mobile&&el.dataset.page!==activePage));const navPage=activePage==='assumptions'?'plan':activePage==='farm-plan'?'farm':activePage;document.querySelectorAll('.mobile-nav button').forEach(btn=>btn.classList.toggle('active',btn.dataset.page===navPage));const labels={overview:'Overview',goals:'Goals',plan:'Plan',assumptions:'Plan',farm:'Farm history','farm-plan':'Farm plan',assets:'Assets'};const crumbEl=document.querySelector('.crumb');if(crumbEl)crumbEl.textContent='My workspace / '+(labels[activePage]||'Overview')}
+function selectPage(page){activePage=page;const mobile=window.matchMedia('(max-width: 760px)').matches;document.body.classList.toggle('is-mobile',mobile);document.querySelectorAll('main [data-page]').forEach(el=>el.classList.toggle('page-hidden',el.dataset.page!==activePage));const navPage=activePage==='assumptions'?'plan':activePage==='farm-plan'?'farm':activePage;document.querySelectorAll('.mobile-nav button').forEach(btn=>btn.classList.toggle('active',btn.dataset.page===navPage));const labels={overview:'Overview',goals:'Goals',plan:'Plan',assumptions:'Plan',farm:'Farm history','farm-plan':'Farm plan',assets:'Assets'};const crumbEl=document.querySelector('.crumb');if(crumbEl)crumbEl.textContent='My workspace / '+(labels[activePage]||'Overview')}
 function setAssetPage(page){assetPage=Math.max(0,Math.min(page,Math.ceil(assets.length/3)-1));renderAssets()}
 function setCropPage(page){cropPage=Math.max(0,Math.min(page,Math.ceil(farmHistory.length/2)-1));renderCropHistory()}
 
@@ -930,5 +930,17 @@ main .planner-section .planner-preview-mark{display:grid;place-items:center;widt
 main .planner-section .planner-preview-empty b{font-size:11px;color:#345943}
 main .planner-section #plannerGrid>.planner-tile.is-selected{outline:2px solid #c4a15a;outline-offset:1px;filter:brightness(1.08)}
 @media(prefers-reduced-motion:reduce){main .planner-section .planner-scroll-track i,main .planner-section .planner-scroll-cue b{animation:none}main .planner-section .planner-preview{transition:none}}
+</style>
+
+<style id="homepage-only-summary-and-clean-milestones">
+/* Overview summary belongs exclusively to Home on desktop and mobile */
+main [data-page].page-hidden{display:none!important}
+/* Remove decorative milestone pictograms and reclaim their grid column */
+.priority-item .priority-icon{display:none!important}
+.priority-item{grid-template-columns:24px 20px minmax(0,1fr) auto!important}
+.priority-item .priority-open{grid-column:3!important}
+.priority-item .priority-date{grid-column:4!important}
+.priority-item .priority-progress{grid-column:3/4!important}
+.priority-item .priority-percent{grid-column:4!important}
 </style>
 </body></html>
