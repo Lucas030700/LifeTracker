@@ -174,7 +174,11 @@ body.planner-overlay-open .timeline-only-card{display:none!important;visibility:
 </style>
 <body><div class="shell"><aside class="sidebar"><div class="brand"><div class="mark">↗</div>lifeplan</div><div class="navlabel">YOUR PLAN</div><nav class="nav"><a class="active" href="#"><span class="ico">◫</span>Overview</a><a href="#events"><span class="ico">◷</span>Life milestones</a><a href="#strategy"><span class="ico">⌁</span>Money strategy</a><a href="#farm"><span class="ico">♧</span>Farm & assets</a></nav><div class="side-note"><b>A plan that grows with you</b>Explore what feels possible. Every number is yours to adjust.</div><div class="profile"><div class="avatar">M</div><div><b>My plan</b><br><small>Personal workspace</small></div></div></aside>
 <main id="top"><section class="page-hero" data-page="overview"><div class="page-hero-mark">✦</div><div><div class="page-hero-kicker">YOUR LIFE, YOUR PLAN</div><h1 class="hello">Life Planner</h1><p class="sub">Your future, in view. Plan your goals, money, and milestones in one place.</p></div><span class="page-hero-orbit" aria-hidden="true"></span></section>
-<div class="metricrow home-metrics" data-page="overview" aria-live="polite"><button class="metric metric-button usable-metric" type="button" id="usableCard" aria-expanded="false" onclick="toggleHomeDetail('usable')"><label>Usable assets</label><strong id="usableTotal">₱—</strong><span>Available for your milestones · View details</span></button><button class="metric metric-button" type="button" id="reserveCard" aria-expanded="false" onclick="toggleHomeDetail('reserve')"><label>Emergency fund</label><strong id="homeReserve">Not set</strong><span>Your protected target · View details</span></button><button class="metric metric-button" type="button" id="worthCard" aria-expanded="false" onclick="toggleHomeDetail('worth')"><label>Net worth</label><strong id="netWorth">₱—</strong><span>After recorded loans · View details</span></button></div><section class="planner-section tracker-shortcuts" data-page="overview"><div class="planner-grid" id="plannerGrid"><button class="planner-tile" type="button" data-planner="salary" onclick="openPlannerFromCard(event,'salary')"><span class="planner-copy"><b>Salary Tracker</b></span></button><button class="planner-tile" type="button" data-planner="travel" onclick="openPlannerFromCard(event,'travel')"><span class="planner-copy"><b>Travel Tracker</b></span></button></div></section><div id="plannerPreview" class="planner-preview" aria-live="polite" aria-hidden="true">
+<div class="metricrow home-metrics" data-page="overview" aria-live="polite"><button class="metric metric-button usable-metric" type="button" id="usableCard" aria-expanded="false" onclick="toggleHomeDetail('usable')"><label>Usable assets</label><strong id="usableTotal">₱—</strong><span>Available for your milestones · View details</span></button><button class="metric metric-button" type="button" id="reserveCard" aria-expanded="false" onclick="toggleHomeDetail('reserve')"><label>Emergency fund</label><strong id="homeReserve">Not set</strong><span>Your protected target · View details</span></button><button class="metric metric-button" type="button" id="worthCard" aria-expanded="false" onclick="toggleHomeDetail('worth')"><label>Net worth</label><strong id="netWorth">₱—</strong><span>After recorded loans · View details</span></button></div><section class="planner-section tracker-shortcuts" data-page="overview"><div class="planner-grid" id="plannerGrid"><button class="planner-tile" type="button" data-planner="salary" onclick="openPlannerFromCard(event,'salary')"><span class="planner-copy"><b>Salary Tracker</b></span></button><button class="planner-tile" type="button" data-planner="travel" onclick="openPlannerFromCard(event,'travel')"><span class="planner-copy"><b>Travel Tracker</b></span></button>
+<button class="planner-tile" type="button" data-planner="home" onclick="openPlannerFromCard(event,'home')"><span class="planner-copy"><b>Home Planner</b></span></button>
+<button class="planner-tile" type="button" data-planner="car" onclick="openPlannerFromCard(event,'car')"><span class="planner-copy"><b>Car Planner</b></span></button>
+<button class="planner-tile" type="button" data-planner="baby" onclick="openPlannerFromCard(event,'baby')"><span class="planner-copy"><b>Child Planner</b></span></button>
+<button class="planner-tile" type="button" data-planner="wedding" onclick="openPlannerFromCard(event,'wedding')"><span class="planner-copy"><b>Wedding Planner</b></span></button></div></section><div id="plannerPreview" class="planner-preview" aria-live="polite" aria-hidden="true">
   <div class="planner-preview-inner">
    <div class="planner-preview-top"><div id="plannerDragHandle" class="planner-drag-handle" role="button" tabindex="0" aria-label="Swipe down to close planner" onpointerdown="startPlannerDismiss(event)" onpointermove="movePlannerDismiss(event)" onpointerup="endPlannerDismiss(event)" onpointercancel="endPlannerDismiss(event)" onclick="if(event.detail===0)closePlannerPreview()"><span></span></div></div>
    <h3 id="plannerPreviewTitle"></h3>
@@ -1250,5 +1254,28 @@ body.planner-overlay-open #plannerPreview{z-index:2147483000!important}
  });
 })();
 </script>
+
+
+<style id="lifetracker-all-planners-launcher">
+/* All standalone planners are available from the horizontally scrollable dashboard launcher. */
+.tracker-shortcuts .planner-grid{
+ display:flex!important;flex-wrap:nowrap!important;grid-template-columns:none!important;
+ gap:9px!important;width:100%!important;overflow-x:auto!important;overflow-y:hidden!important;
+ padding:2px 2px 9px!important;scroll-snap-type:x mandatory!important;
+ -webkit-overflow-scrolling:touch!important;scrollbar-width:none!important;touch-action:pan-x!important
+}
+.tracker-shortcuts .planner-grid::-webkit-scrollbar{display:none!important}
+.tracker-shortcuts .planner-tile{
+ flex:0 0 calc((100% - 18px)/3)!important;width:calc((100% - 18px)/3)!important;
+ min-width:0!important;min-height:62px!important;height:62px!important;
+ display:flex!important;align-items:center!important;justify-content:center!important;
+ padding:8px!important;scroll-snap-align:start!important;scroll-snap-stop:always!important
+}
+.tracker-shortcuts .planner-copy{min-width:0!important;text-align:center!important}
+.tracker-shortcuts .planner-copy b{font-size:12px!important;line-height:1.2!important}
+@media(max-width:380px){
+ .tracker-shortcuts .planner-tile{flex-basis:calc((100% - 9px)/2)!important;width:calc((100% - 9px)/2)!important}
+}
+</style>
 
 </body></html>
