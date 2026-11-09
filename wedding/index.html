@@ -15,6 +15,31 @@
 .footer{font-size:9px;color:var(--muted);padding:12px 2px}
 @media(max-width:720px){.app{padding:9px}.hero{padding:16px}.hero h1{font-size:22px}.stats{grid-template-columns:repeat(2,1fr)}.grid{grid-template-columns:1fr}.row{grid-template-columns:1fr 1fr}.budgetrow{grid-template-columns:1fr 1fr}.budgetrow input:first-of-type{grid-column:1/-1}.budgetrow button{grid-column:2;justify-self:end}.feature-top{grid-template-columns:minmax(0,1fr) 90px 24px}.feature-grid{grid-template-columns:1fr 1fr}}
 @media(max-width:380px){.feature-grid,.row{grid-template-columns:1fr}}
+
+/* Mobile layout corrections: prevent native date/time controls and grid children from overflowing. */
+.grid > *, .row > *, .feature-grid > *, .field { min-width:0; }
+.field input, .field select, .field textarea { display:block; min-width:0; max-width:100%; }
+.feature-budget, .repeatline input { min-width:0; max-width:100%; }
+input[type="date"], input[type="time"] { display:block; width:100%; min-width:0; max-width:100%; font-variant-numeric:tabular-nums; }
+.feature-title span { min-width:0; overflow-wrap:anywhere; }
+@media(max-width:600px){
+  .feature-grid { grid-template-columns:minmax(0,1fr); }
+  .feature-card { padding:10px; }
+  .feature-top { grid-template-columns:minmax(0,1fr) 88px 30px; gap:6px; }
+  .feature-top .feature-budget { min-width:0; padding:8px 6px; }
+  .feature-toggle { width:30px; height:34px; }
+  .feature-details { padding-top:10px; }
+  .feature-details .field { margin:8px 0 12px; }
+  .feature-range { display:block; min-width:0; }
+  .panel { padding:12px; }
+  .stage { padding:9px; }
+}
+@media(max-width:380px){
+  .feature-top { grid-template-columns:minmax(0,1fr) 76px 28px; gap:5px; }
+  .feature-title { font-size:10px; }
+  .feature-top .feature-budget { font-size:10px; }
+  .row { grid-template-columns:minmax(0,1fr); }
+}
 </style></head><body><main class="app">
 <header class="hero"><div class="eyebrow">LIFE SOFTWARE · COUPLE & FAMILY PLANNING</div><h1>Wedding · Event & Financial Planner</h1><p>Plan the celebration, estimate every feature and know how much to prepare. No wedding date required yet.</p></header>
 <section class="stats"><div class="stat"><small>Estimated wedding budget</small><b id="statBudget">₱0</b><em>Selected features only</em></div><div class="stat"><small>Current wedding savings</small><b id="statSavings">₱0</b><em>Dedicated wedding fund</em></div><div class="stat"><small>Expected guests</small><b id="statGuests">0</b><em>Guest count estimate</em></div><div class="stat"><small>Funding progress</small><b id="statProgress">0%</b><em id="statProgressHint">Set your savings</em></div></section>
