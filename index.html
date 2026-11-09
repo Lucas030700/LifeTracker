@@ -284,7 +284,54 @@ const fields=['salary','expenses','savings','cashOnHand','safetyReserve','raise'
 const SUPABASE_URL='https://tkqgqwhjqidkprzqpcdc.supabase.co';const SUPABASE_KEY='sb_publishable_jBldoZA2KNt6SkEojsDuAg_aNjlqc79';const supabaseClient=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);let currentUser=null,cloudReady=false,cloudHydrating=false,cloudSyncTimer=null,cloudLocalDirty=false,authMode='login',lastCloudUpdatedAt=0,cloudRevision=0,cloudRealtimeChannel=null,realtimeConnected=false,lastSavedSignature='',cloudSaveInFlight=false,cloudPollInFlight=false;
 try{const saved=JSON.parse(localStorage.getItem('lifeplan-v1')||'null');if(saved){if(Array.isArray(saved.assets))assets=saved.assets;if(Array.isArray(saved.farmHistory))farmHistory=saved.farmHistory;if(saved.goals){Object.keys(goalCosts).forEach(n=>delete goalCosts[n]);Object.assign(goalCosts,saved.goals)}if(saved.goalMeta){Object.keys(goalMeta).forEach(n=>delete goalMeta[n]);Object.assign(goalMeta,saved.goalMeta)}if(Array.isArray(saved.customPlanners)){customPlanners=saved.customPlanners;customPlanners.forEach(p=>{plannerInfo[p.key]={title:p.name+' Planner',desc:'Your custom planning workspace.'};});renderCustomPlanners()};if(Array.isArray(saved.plannerOrder)){const g=document.getElementById('plannerGrid'),tiles=[...g.children];tiles.sort((a,b)=>saved.plannerOrder.indexOf(a.dataset.planner)-saved.plannerOrder.indexOf(b.dataset.planner));tiles.forEach(t=>g.appendChild(t))};if(Array.isArray(saved.priorityOrder))priorityOrder=saved.priorityOrder.filter(n=>Object.prototype.hasOwnProperty.call(goalCosts,n));if(Array.isArray(saved.plannerOrder)){const grid=document.getElementById('plannerGrid'),tiles=[...grid.children],order=saved.plannerOrder;tiles.sort((a,b)=>order.indexOf(a.dataset.planner)-order.indexOf(b.dataset.planner));tiles.forEach(tile=>grid.appendChild(tile))}if(saved.split!=null)document.getElementById('cashSplit').value=saved.split;if(saved.inputs)Object.entries(saved.inputs).forEach(([id,v])=>{let el=document.getElementById(id);if(el)el.value=v})}}catch(e){}priorityOrder=[...Object.keys(goalCosts)].sort((a,b)=>{let ai=priorityOrder.indexOf(a),bi=priorityOrder.indexOf(b);return(ai<0?99:ai)-(bi<0?99:bi)})
 function val(id){return Math.max(0,Number(document.getElementById(id).value)||0)}
-function model(){let salary=val('salary'),expenses=val('expenses'),savings=val('savings'),cashOnHand=val('cashOnHand'),safetyReserve=val('safetyReserve'),raise=val('raise')/100,land=assets.filter(a=>!a.sold&&['Land','Farm'].includes(a.type)).reduce((n,a)=>n+a.value,0),landDebt=assets.filter(a=>!a.sold&&['Land','Farm'].includes(a.type)).reduce((n,a)=>n+a.debt,0),otherNet=assets.filter(a=>!a.sold&&!['Land','Farm'].includes(a.type)).reduce((n,a)=>n+a.value-a.debt,0),profit=farmHistory.length?farmHistory.reduce((s,r)=>s+r.income-r.expense,0)/farmHistory.length:val('profit'),cycles=val('cycles'),split=Number(document.getElementById('cashSplit').value)/100,annual=profit*cycles;let cash=savings+cashOnHand,farm=land,series=[],events=priorityOrder.filter(name=>Object.prototype.hasOwnProperty.call(goalCosts,name)).map(name=>({name,icon:(goalMeta[name]&&goalMeta[name].icon)||'☆',cost:goalCosts[name],kind:(goalMeta[name]&&goalMeta[name].kind)||'Personal milestone'})),milestones={},committed=0,nextGoal=0;for(let m=0;m<=240;m++){let y=Math.floor(m/12),sal=salary*Math.pow(1+raise,y),surplus=Math.max(0,sal-expenses);if(m>0){cash+=surplus*split;farm+=surplus*(1-split)+annual/12;farm*=Math.pow(1.025,1/12)}if(m%12===0)series.push({m,cash,farm});while(nextGoal<events.length&&(cash+farm-landDebt+otherNet-safetyReserve-committed)>=events[nextGoal].cost){milestones[events[nextGoal].name]=m;committed+=events[nextGoal].cost;nextGoal++}}
+function readPlannerBudget(key){
+ try{
+  const d=JSON.parse(localStorage.getItem(key)||'null');
+  if(!d)return null;
+  const target=Number(d.budgetTarget)||0;
+  const estimates=Array.isArray(d.expenses)?d.expenses.reduce((n,item)=>n+(Number(item.estimate)||0),0):0;
+  const value=target>0?target:estimates;
+  return value>0?value:null;
+ }catch(e){return null}
+}
+function readWeddingPlannerBudget(){
+ try{
+  const d=JSON.parse(localStorage.getItem('weddingEventPlanner_v11')||'null');
+  if(!d||!d.items)return null;
+  const selected=Object.values(d.items).filter(item=>item&&item.selected);
+  if(!selected.length)return null;
+  return selected.reduce((n,item)=>n+(Number(item.budget)||0),0);
+ }catch(e){return null}
+}
+function syncPlannerBudgets(){
+ const sources=[
+  {key:'home-planner-v1',match:/home|house|property/},
+  {key:'car-planner-v1',match:/car|vehicle|motor/},
+  {key:'baby-planner-v1',match:/child|baby|family/}
+ ];
+ let changed=false;
+ for(const name of Object.keys(goalCosts)){
+  const text=(name+' '+((goalMeta[name]&&goalMeta[name].kind)||'')).toLowerCase();
+  let value=null;
+  if(/wedding|marriage/.test(text))value=readWeddingPlannerBudget();
+  else{
+   const source=sources.find(item=>item.match.test(text));
+   if(source)value=readPlannerBudget(source.key);
+  }
+  if(value!==null&&Number.isFinite(value)&&value>=0&&goalCosts[name]!==value){
+   goalCosts[name]=value;
+   changed=true;
+  }
+ }
+ if(changed){
+  try{localStorage.setItem('lifeplan-v1',JSON.stringify(collectLifePlanData()))}catch(e){}
+  if(cloudReady&&!cloudHydrating)scheduleCloudSync();
+ }
+}
+window.addEventListener('storage',e=>{
+ if(['home-planner-v1','car-planner-v1','baby-planner-v1','weddingEventPlanner_v11'].includes(e.key))draw();
+});
+function model(){syncPlannerBudgets();let salary=val('salary'),expenses=val('expenses'),savings=val('savings'),cashOnHand=val('cashOnHand'),safetyReserve=val('safetyReserve'),raise=val('raise')/100,land=assets.filter(a=>!a.sold&&['Land','Farm'].includes(a.type)).reduce((n,a)=>n+a.value,0),landDebt=assets.filter(a=>!a.sold&&['Land','Farm'].includes(a.type)).reduce((n,a)=>n+a.debt,0),otherNet=assets.filter(a=>!a.sold&&!['Land','Farm'].includes(a.type)).reduce((n,a)=>n+a.value-a.debt,0),profit=farmHistory.length?farmHistory.reduce((s,r)=>s+r.income-r.expense,0)/farmHistory.length:val('profit'),cycles=val('cycles'),split=Number(document.getElementById('cashSplit').value)/100,annual=profit*cycles;let cash=savings+cashOnHand,farm=land,series=[],events=priorityOrder.filter(name=>Object.prototype.hasOwnProperty.call(goalCosts,name)).map(name=>({name,icon:(goalMeta[name]&&goalMeta[name].icon)||'☆',cost:goalCosts[name],kind:(goalMeta[name]&&goalMeta[name].kind)||'Personal milestone'})),milestones={},committed=0,nextGoal=0;for(let m=0;m<=240;m++){let y=Math.floor(m/12),sal=salary*Math.pow(1+raise,y),surplus=Math.max(0,sal-expenses);if(m>0){cash+=surplus*split;farm+=surplus*(1-split)+annual/12;farm*=Math.pow(1.025,1/12)}if(m%12===0)series.push({m,cash,farm});while(nextGoal<events.length&&(cash+farm-landDebt+otherNet-safetyReserve-committed)>=events[nextGoal].cost){milestones[events[nextGoal].name]=m;committed+=events[nextGoal].cost;nextGoal++}}
 return {salary,expenses,savings,cashOnHand,safetyReserve,raise,land,landDebt,otherNet,profit,cycles,split,annual,cash,farm,series,events,milestones}}
 function dateFor(m){if(m==null)return 'Beyond 20 yrs';let d=new Date();d.setMonth(d.getMonth()+m);return d.toLocaleDateString('en-US',{month:'short',year:'numeric'})}
 function renderMilestoneTimeline(d){const host=document.getElementById("milestoneTimeline");if(!host)return;const entries=(d.events||[]).map((e,i)=>({event:e,month:d.milestones[e.name],order:i+1})).sort((a,b)=>(a.month??99999)-(b.month??99999));if(!entries.length){host.innerHTML="<div class=\"timeline-empty\">Add a milestone to see it on your timeline.</div>";return}const first=entries.find(x=>x.month!=null);host.innerHTML=entries.map(x=>{const m=x.month,date=m==null?"Beyond 20 yrs":m===0?"Now":dateFor(m),status=m==null?"Outside the 20-year projection":m===0?"Fundable with current resources":m<12?`Estimated in ${m} months`:`Estimated in ${Math.round(m/12)} years`,kind=esc(x.event.kind||"Personal milestone");return `<div class="timeline-stop ${first===x?"is-next":""}"><div class="timeline-dot"></div><div class="timeline-date">${date}</div><div class="timeline-name">${esc(x.event.name)}</div><div class="timeline-kind">${kind}</div><div class="timeline-budget">Target budget <b>${peso(x.event.cost)}</b></div><div class="timeline-status">${status}</div><div class="timeline-sequence">Funding order #${x.order}</div></div>`}).join("")}
